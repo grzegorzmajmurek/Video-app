@@ -7,6 +7,7 @@ import { SearchInputComponent } from '../shared-components/search-input/search-i
 import { AppMaterialModule } from './app-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonComponent } from '../shared-components/button/button.component';
+import { DialogComponent } from '../shared-components/dialog/dialog.component';
 
 
 @NgModule({
@@ -14,8 +15,10 @@ import { ButtonComponent } from '../shared-components/button/button.component';
     AppComponent,
     ContentComponent,
     SearchInputComponent,
-    ButtonComponent
+    ButtonComponent,
+    DialogComponent
   ],
+  entryComponents: [DialogComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
