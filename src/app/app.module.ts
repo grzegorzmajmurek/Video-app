@@ -2,21 +2,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ContentComponent } from '../content/content.component';
-import { FooterComponent } from '../footer/footer.component';
-import { HeaderComponent } from '../header/header.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchInputComponent } from '../shared-components/search-input/search-input.component';
+import { AppMaterialModule } from './app-material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ButtonComponent } from '../shared-components/button/button.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ContentComponent,
-    FooterComponent,
-    HeaderComponent,
+    SearchInputComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
-
+    HttpClientModule,
+    BrowserAnimationsModule,
+    AppMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
