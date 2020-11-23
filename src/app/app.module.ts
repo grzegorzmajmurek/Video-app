@@ -8,6 +8,7 @@ import { AppMaterialModule } from './app-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonComponent } from '../shared-components/button/button.component';
 import { DialogComponent } from '../shared-components/dialog/dialog.component';
+import { ApiService } from '../services/api.service';
 
 
 @NgModule({
@@ -25,7 +26,9 @@ import { DialogComponent } from '../shared-components/dialog/dialog.component';
     BrowserAnimationsModule,
     AppMaterialModule
   ],
-  providers: [],
+  providers: [
+    ApiService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

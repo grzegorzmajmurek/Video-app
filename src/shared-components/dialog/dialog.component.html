@@ -1,6 +1,5 @@
-<h2 mat-dialog-title>Sesja wygasła</h2>
-<mat-dialog-content>Cześć {{data.name}} Zostaniesz wylogowany</mat-dialog-content>
-<mat-dialog-actions>
-<button mat-button mat-dialog-close mat-dialog-close="true">Zaloguj się</button>
-<button mat-button mat-dialog-close mat-dialog-close="false">Wyloguj się</button>
-</mat-dialog-actions>
+<section id="video">
+  <iframe width="560" height="315" [src]="data.url" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+</section>
