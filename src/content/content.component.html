@@ -1,7 +1,10 @@
 <app-search-input value="nowa wartosc" (valueChanged)="handleValue($event)"></app-search-input>
-<app-button label="Otwórz modal" (buttonClick)="openDialog()"></app-button>
-<section id="video">
-    <iframe width="560" height="315" [src]="url" frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
-  </section>
+
+<div *ngFor="let movie of allMovies; let i=index">
+  <div>
+    <p>{{movie.title}}</p>
+    <img [src]="movie.image.url" width="movie.image.width" height="movie.image.height" (click)="openDialog(movie.url)">
+    <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
+    <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
+  </div>
+</div>

@@ -33,7 +33,7 @@ export interface YoutubeApiItemResponse {
             description: string;
         },
         defaultAudioLanguage: string;
-    },
+    };
     statistics: {
         viewCount: string;
         likeCount: string;
