@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../shared-components/dialog/dialog.component';
 import { ApiService } from '../services/api.service';
 import { extractIdFromString } from '../utile/utile';
+import { YoutubeApiResponse } from '../model/api-response.model';
+import { MoviesService } from '../services/movies.service';
+import { Movie } from '../model/movies.model';
 
 @Component({
   selector: 'app-content',
@@ -11,47 +14,63 @@ import { extractIdFromString } from '../utile/utile';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
-  defaultID: any = '';
-  valueFromInput: string = '';
+  valueFromInput = '';
 
-  constructor(public apiService: ApiService, private dom: DomSanitizer, public dialog: MatDialog) { }
-  
-  
-  get url(): SafeUrl {
-    const a = `https://www.youtube.com/embed/${this.id}`;
-    return this.dom.bypassSecurityTrustResourceUrl(a);
-  }
-
-  get id(): string {
-    return this.defaultID;
-  }
+  constructor(public apiService: ApiService,
+    private dom: DomSanitizer,
+    public dialog: MatDialog,
+    public moviesService: MoviesService) { }
 
 
   ngOnInit(): void {
-     this.apiService.fetchYoutubeApi(this.valueFromInput)
-      .subscribe((res: any) => {
-        console.log(res);
-        this.defaultID = res.items[0].id
-      });
+  }
+
+
+  get allMovies(): Movie[] {
+    return this.moviesService.allMovies;
+  }
+
+  trustUrl(url: string): SafeUrl {
+    return this.dom.bypassSecurityTrustResourceUrl(url);
   }
 
   handleValue(valueFromInput: any): void {
-    console.log('hee to jest nowa wartosc:', valueFromInput);
+
     this.valueFromInput = valueFromInput;
-    const id = extractIdFromString(valueFromInput);
-    this.apiService.fetchYoutubeApi(id)
-      .subscribe((res: any) => {
-        console.log(res);
-        this.defaultID = res.items[0].id
+    const idx = extractIdFromString(valueFromInput);
+
+
+    this.apiService.fetchYoutubeApi(idx)
+      .subscribe((res: YoutubeApiResponse) => {
+        const { id, snippet, statistics } = res.items[0];
+        const movie: Movie = {
+          movieId: id,
+          image: {
+            url: snippet.thumbnails.default.url,
+            width: snippet.thumbnails.default.width,
+            height: snippet.thumbnails.default.height,
+          },
+          title: snippet.title,
+          viewCount: statistics.viewCount,
+          publishedAt: snippet.publishedAt,
+          url: `https://www.youtube.com/embed/${id}`,
+          favourite: false
+        };
+        this.moviesService.addMovie(movie);
       });
+
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {data: {url: this.url}});
+  openDialog(url: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, { data: { url: this.trustUrl(url) } });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog: ${result}`);
     });
+  }
+
+  deleteMovie(id: number): void {
+    this.moviesService.deleteMovie(id);
   }
 
 }

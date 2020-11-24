@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonComponent } from '../shared-components/button/button.component';
 import { DialogComponent } from '../shared-components/dialog/dialog.component';
 import { ApiService } from '../services/api.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MoviesService } from '../services/movies.service';
 
 
 @NgModule({
@@ -22,12 +24,15 @@ import { ApiService } from '../services/api.service';
   entryComponents: [DialogComponent],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     AppMaterialModule
   ],
   providers: [
-    ApiService
+    ApiService,
+    MoviesService
   ],
   bootstrap: [AppComponent]
 })
