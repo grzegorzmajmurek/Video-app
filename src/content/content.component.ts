@@ -17,9 +17,9 @@ export class ContentComponent implements OnInit {
   valueFromInput = '';
 
   constructor(public apiService: ApiService,
-              private dom: DomSanitizer,
-              public dialog: MatDialog,
-              public moviesService: MoviesService) { }
+    private dom: DomSanitizer,
+    public dialog: MatDialog,
+    public moviesService: MoviesService) { }
 
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class ContentComponent implements OnInit {
   trustUrl(url: string): SafeUrl {
     return this.dom.bypassSecurityTrustResourceUrl(url);
   }
-  
+
   handleValue(valueFromInput: any): void {
 
     this.valueFromInput = valueFromInput;
@@ -44,7 +44,7 @@ export class ContentComponent implements OnInit {
       .subscribe((res: YoutubeApiResponse) => {
         const { id, snippet, statistics } = res.items[0];
         const movie: Movie = {
-          id,
+          movieId: id,
           image: {
             url: snippet.thumbnails.default.url,
             width: snippet.thumbnails.default.width,
@@ -67,6 +67,10 @@ export class ContentComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog: ${result}`);
     });
+  }
+
+  deleteMovie(id: number): void {
+    this.moviesService.deleteMovie(id);
   }
 
 }
