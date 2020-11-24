@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../shared-components/dialog/dialog.component';
 import { ApiService } from '../services/api.service';
 import { extractIdFromString } from '../utile/utile';
+import { YoutubeApiResponse } from '../model/api-response.model';
 
 @Component({
   selector: 'app-content',
@@ -40,9 +41,8 @@ export class ContentComponent implements OnInit {
     this.valueFromInput = valueFromInput;
     const id = extractIdFromString(valueFromInput);
     this.apiService.fetchYoutubeApi(id)
-      .subscribe((res: any) => {
-        console.log(res);
-        this.defaultID = res.items[0].id
+      .subscribe((res: YoutubeApiResponse) => {
+        this.defaultID = res.items[0].id;
       });
   }
 
