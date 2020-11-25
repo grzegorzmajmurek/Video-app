@@ -10,3 +10,8 @@ export interface Movie {
     url: string;
     favourite: boolean;
 }
+
+export enum DISPLAY_TYPE {
+    CARD = 'CARD',
+    LIST = 'LIST'
+}

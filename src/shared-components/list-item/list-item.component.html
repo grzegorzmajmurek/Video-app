@@ -1,0 +1,32 @@
+<ng-container *ngIf="type === DISPLAY_TYPE.LIST; else card">
+  <mat-card style="width:100%; display: flex;">
+    <div style="align-self: center;">
+      <img [src]="movie.image.url" width="movie.image.width" height="movie.image.height"
+        (click)="openDialog(movie.url)">
+    </div>
+    <div style="padding: 20px;">
+      <p>{{movie.title}}</p>
+      <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
+      <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
+      <app-button label="Usuń" (buttonClick)="deleteMovie(movie.id)"></app-button>
+      <app-button label="Dodaj do ulubionych" (buttonClick)="setFavourite(movie.id)"></app-button>
+    </div>
+  </mat-card>
+</ng-container>
+
+
+<ng-template #card>
+  <mat-card style="margin: 10px">
+   <img mat-card-image [src]="movie.image.url" width="movie.image.width" height="movie.image.height"
+      (click)="openDialog(movie.url)">
+    <mat-card-content>
+      <h5>{{movie.title}}</h5>
+      <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
+      <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
+    </mat-card-content>
+    <mat-card-actions>
+      <app-button label="Usuń" (buttonClick)="deleteMovie(movie.id)"></app-button>
+      <app-button label="Dodaj do ulubionych" (buttonClick)="setFavourite(movie.id)"></app-button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

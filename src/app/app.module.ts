@@ -11,6 +11,7 @@ import { DialogComponent } from '../shared-components/dialog/dialog.component';
 import { ApiService } from '../services/api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MoviesService } from '../services/movies.service';
+import { ListItemComponent } from '../shared-components/list-item/list-item.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { MoviesService } from '../services/movies.service';
     ContentComponent,
     SearchInputComponent,
     ButtonComponent,
-    DialogComponent
+    DialogComponent,
+    ListItemComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
