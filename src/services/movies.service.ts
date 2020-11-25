@@ -28,5 +28,15 @@ export class MoviesService {
         const index = this.movies.findIndex(x => x.id === id);
         this.movies.splice(index, 1);
     }
+
+    setFavourite(id: number): void {
+        const movie = this.movies.find(x => x.id === id);
+        movie.favourite = true;
+    }
+
+    deleteFavorite(id: number): void {
+        const movie = this.movies.find(x => x.id === id);
+        movie.favourite = false;
+    }
 }
 

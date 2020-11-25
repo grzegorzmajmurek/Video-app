@@ -73,4 +73,14 @@ export class ContentComponent implements OnInit {
     this.moviesService.deleteMovie(id);
   }
 
+  setFavourite(id: number): void {
+    this.moviesService.setFavourite(id);
+    console.log(id, this.allMovies);
+  }
+
+  deleteFavorite(id: number): void {
+    this.moviesService.deleteFavorite(id);
+    console.log(id, this.allMovies);
+  }
+
 }
