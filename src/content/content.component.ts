@@ -6,7 +6,8 @@ import { ApiService } from '../services/api.service';
 import { extractIdFromString } from '../utile/utile';
 import { YoutubeApiResponse } from '../model/api-response.model';
 import { MoviesService } from '../services/movies.service';
-import { Movie } from '../model/movies.model';
+import { Movie, DISPLAY_TYPE } from '../model/movies.model';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-content',
@@ -15,10 +16,10 @@ import { Movie } from '../model/movies.model';
 })
 export class ContentComponent implements OnInit {
   valueFromInput = '';
+  DISPLAY_TYPE = DISPLAY_TYPE;
+  type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
 
   constructor(public apiService: ApiService,
-    private dom: DomSanitizer,
-    public dialog: MatDialog,
     public moviesService: MoviesService) { }
 
 
@@ -30,8 +31,12 @@ export class ContentComponent implements OnInit {
     return this.moviesService.allMovies;
   }
 
-  trustUrl(url: string): SafeUrl {
-    return this.dom.bypassSecurityTrustResourceUrl(url);
+  get rowHeight(): string {
+    return this.type === DISPLAY_TYPE.LIST ? '4:1' : '1:2';
+  }
+
+  get cols(): string {
+    return this.type === DISPLAY_TYPE.LIST ? '1' : '4';
   }
 
   handleValue(valueFromInput: any): void {
@@ -61,26 +66,13 @@ export class ContentComponent implements OnInit {
 
   }
 
-  openDialog(url: string): void {
-    const dialogRef = this.dialog.open(DialogComponent, { data: { url: this.trustUrl(url) } });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog: ${result}`);
-    });
-  }
-
-  deleteMovie(id: number): void {
-    this.moviesService.deleteMovie(id);
-  }
-
-  setFavourite(id: number): void {
-    this.moviesService.setFavourite(id);
-    console.log(id, this.allMovies);
-  }
 
   deleteFavorite(id: number): void {
     this.moviesService.deleteFavorite(id);
-    console.log(id, this.allMovies);
+  }
+
+  changeDisplayType(type: DISPLAY_TYPE): void {
+    this.type = type;
   }
 
 }

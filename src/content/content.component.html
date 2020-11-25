@@ -1,18 +1,18 @@
-<app-search-input value="nowa wartosc" (valueChanged)="handleValue($event)"></app-search-input>
+<app-button label="Lista" (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
+<app-button label="Kafelki" (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Item 1</button>
+  <button mat-menu-item>Item 2</button>
+</mat-menu>
+<app-search-input (valueChanged)="handleValue($event)"></app-search-input>
+<mat-grid-list style="width: 100%;" [cols]="cols" [rowHeight]="rowHeight">
+  <mat-grid-tile *ngFor="let movie of allMovies" style="width: 100%;">
+    <app-list-item [type]="type" [movie]="movie" style="width: 100%;"></app-list-item>
+  </mat-grid-tile>
+</mat-grid-list>
 
 <div *ngFor="let movie of allMovies">
-  <div>
-    <p>{{movie.title}}</p>
-    <img [src]="movie.image.url" width="movie.image.width" height="movie.image.height" (click)="openDialog(movie.url)">
-    <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
-    <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
-    <app-button label="Usuń" (buttonClick)="deleteMovie(movie.id)"></app-button>
-    <app-button label="Dodaj do ulubionych" (buttonClick)="setFavourite(movie.id)"></app-button>
-  </div>
-</div>
-
-<div *ngFor="let movie of allMovies">
-  <div *ngIf="movie.favourite === true">
+  <div *ngIf="movie.favourite">
     <p>Tylko ulubione</p>
     <img [src]="movie.image.url" width="movie.image.width" height="movie.image.height" (click)="openDialog(movie.url)">
     <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
@@ -20,5 +20,3 @@
     <app-button label="Usuń z ulubionych" (buttonClick)="deleteFavorite(movie.id)"></app-button>
   </div>
 </div>
-
-

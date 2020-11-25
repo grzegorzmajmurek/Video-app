@@ -1,3 +1,4 @@
+
 export const extractIdFromString = (link: string): string => {
     const digits_only = string => [...string].every(c => '0123456789'.includes(c));
     const substringLink = (searchedText) => {
@@ -26,3 +27,4 @@ export const extractIdFromString = (link: string): string => {
     }
 
 };
+
