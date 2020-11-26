@@ -24,6 +24,7 @@ export class ContentComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.moviesService.setMoviesFromLocalStorage();
   }
 
 
