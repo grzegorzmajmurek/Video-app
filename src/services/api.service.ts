@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { YoutubeApiResponse } from '../model/api-response.model';
+import { YoutubeApiResponse, VimeoApiResponse } from '../model/api-response.model';
 
 @Injectable({
     providedIn: 'root',
@@ -24,5 +24,14 @@ export class ApiService {
         params = params.append('part', 'statistics');
         return  this.httpClient.get('https://www.googleapis.com/youtube/v3/videos', { params }) as Observable<YoutubeApiResponse>;
     }
+
+    fetchVimeoApi(id: string) : Observable<VimeoApiResponse> {
+        let headers = new HttpHeaders();
+        headers = headers
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'bearer cd8e334981fc10547fc7fce998372490')
+        .set('Accept', 'application/vnd.vimeo.user+json;version=3.0,application/vnd.vimeo.video+json;version=3.4')
+        return  this.httpClient.get(`https://api.vimeo.com/videos/${id}`, { headers }) as Observable<VimeoApiResponse>;
+    };
 
 }

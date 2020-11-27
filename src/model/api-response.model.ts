@@ -49,3 +49,22 @@ export interface Thumbnails {
     width: number;
     height: number;
 }
+
+export interface VimeoApiResponse {
+    uri: string;
+    name: string;
+    description: string;
+    embed: {
+        html: string;
+    };
+    created_time: string;
+    pictures: {
+        sizes: PictureSize[];
+    }
+}
+
+export interface PictureSize {
+    width: number;
+    height: number;
+    link: string;
+}

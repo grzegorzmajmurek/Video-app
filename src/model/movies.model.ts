@@ -15,3 +15,8 @@ export enum DISPLAY_TYPE {
     CARD = 'CARD',
     LIST = 'LIST'
 }
+
+export enum VIDEO_WEBSITE {
+    YOUTUBE = 'YOUTUBE',
+    VIMEO = 'VIMEO'
+}
