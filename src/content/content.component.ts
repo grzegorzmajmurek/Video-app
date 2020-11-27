@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../shared-components/dialog/dialog.component';
+import { VimeoApiResponse, YoutubeApiResponse } from '../model/api-response.model';
+import { DISPLAY_TYPE, Movie, VIDEO_WEBSITE } from '../model/movies.model';
 import { ApiService } from '../services/api.service';
-import { extractIdFromString } from '../utile/utile';
-import { YoutubeApiResponse } from '../model/api-response.model';
 import { MoviesService } from '../services/movies.service';
-import { Movie, DISPLAY_TYPE } from '../model/movies.model';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { extractIdAndWebsiteType } from '../utile/utile';
 
 @Component({
   selector: 'app-content',
@@ -15,7 +11,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
-  valueFromInput = '';
   DISPLAY_TYPE = DISPLAY_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
 
@@ -40,31 +35,52 @@ export class ContentComponent implements OnInit {
     return this.type === DISPLAY_TYPE.LIST ? '1' : '4';
   }
 
+  handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
+    console.log(type);
+    if (type === VIDEO_WEBSITE.VIMEO) {
+      this.apiService.fetchVimeoApi(idVideo)
+        .subscribe((res: VimeoApiResponse) => {
+          const movie: Movie = {
+            movieId: idVideo,
+            image: {
+              url: res.pictures.sizes[0].link,
+              width: res.pictures.sizes[0].width,
+              height: res.pictures.sizes[0].height
+            },
+            title: res.name,
+            viewCount: '',
+            publishedAt: res.created_time,
+            url: `https://player.vimeo.com/video/${idVideo}`,
+            favourite: false
+          };
+          this.moviesService.addMovie(movie);
+        })
+    }
+    if (type === VIDEO_WEBSITE.YOUTUBE) {
+      this.apiService.fetchYoutubeApi(idVideo)
+        .subscribe((res: YoutubeApiResponse) => {
+          const { id, snippet, statistics } = res.items[0];
+          const movie: Movie = {
+            movieId: id,
+            image: {
+              url: snippet.thumbnails.default.url,
+              width: snippet.thumbnails.default.width,
+              height: snippet.thumbnails.default.height,
+            },
+            title: snippet.title,
+            viewCount: statistics.viewCount,
+            publishedAt: snippet.publishedAt,
+            url: `https://www.youtube.com/embed/${id}`,
+            favourite: false
+          };
+          this.moviesService.addMovie(movie);
+        });
+    }
+  }
+
   handleValue(valueFromInput: any): void {
-
-    this.valueFromInput = valueFromInput;
-    const idx = extractIdFromString(valueFromInput);
-
-
-    this.apiService.fetchYoutubeApi(idx)
-      .subscribe((res: YoutubeApiResponse) => {
-        const { id, snippet, statistics } = res.items[0];
-        const movie: Movie = {
-          movieId: id,
-          image: {
-            url: snippet.thumbnails.default.url,
-            width: snippet.thumbnails.default.width,
-            height: snippet.thumbnails.default.height,
-          },
-          title: snippet.title,
-          viewCount: statistics.viewCount,
-          publishedAt: snippet.publishedAt,
-          url: `https://www.youtube.com/embed/${id}`,
-          favourite: false
-        };
-        this.moviesService.addMovie(movie);
-      });
-
+    const { idVideo, videoWebsite } = extractIdAndWebsiteType(valueFromInput);
+    this.handleApiResponse(videoWebsite, idVideo);
   }
 
 
