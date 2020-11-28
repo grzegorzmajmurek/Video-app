@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Movie } from './../model/movies.model';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { VimeoApiResponse, YoutubeApiResponse } from '../model/api-response.model';
-import { DISPLAY_TYPE, Movie, VIDEO_WEBSITE, SORT } from '../model/movies.model';
+import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '../model/movies.model';
 import { ApiService } from '../services/api.service';
 import { MoviesService } from '../services/movies.service';
 import { extractIdAndWebsiteType } from '../utile/utile';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-content',
@@ -12,9 +14,16 @@ import { extractIdAndWebsiteType } from '../utile/utile';
 })
 export class ContentComponent implements OnInit {
   SORT = SORT;
+  sortType: SORT = SORT.ASC;
   DISPLAY_TYPE = DISPLAY_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavouriteMovie: boolean = false;
+  page: PageEvent = {
+    pageIndex: 0,
+    pageSize: 3,
+    length: this.allMovies.length,
+  };
+  sortedMovies: Movie[] = [];
 
   constructor(public apiService: ApiService,
     public moviesService: MoviesService) { }
@@ -24,10 +33,23 @@ export class ContentComponent implements OnInit {
     this.moviesService.setMoviesFromLocalStorage();
   }
 
+  get sortedMoviesList(): Movie[] {
+    let sliceMovies = this.slicePage(this.favourtiteMovies, this.page);
+    if (sliceMovies.length === 0) {
+      const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
+      this.page = { ...this.page, ...{ pageIndex: newPageIndex } };
+      sliceMovies = this.slicePage(this.favourtiteMovies, this.page);
+    }
+    return sliceMovies.sort((a, b) => this.compare(a, b, this.sortType));
+  }
+
   get allMovies(): Movie[] {
-    const all = this.moviesService.allMovies;
-    const onlyFavourite = all.filter((movie: Movie) => movie.favourite === true);
-    return !this.onlyFavouriteMovie ? all : onlyFavourite;
+    return this.moviesService.allMovies;
+
+  }
+  get favourtiteMovies(): Movie[] {
+    const onlyFavourite = this.allMovies.filter((movie: Movie) => movie.favourite === true);
+    return !this.onlyFavouriteMovie ? this.allMovies : onlyFavourite;
   }
 
   get rowHeight(): string {
@@ -99,20 +121,28 @@ export class ContentComponent implements OnInit {
     this.onlyFavouriteMovie = onlyFavouriteMovie;
   }
 
-  sortByDate(date: SORT): void {
-    const compare = (a, b) => {
-      const dateA = new Date(a.publishedAt);
-      const dateB = new Date(b.publishedAt);
-      let comparison = 0;
-      if (date === SORT.ASC) {
-        comparison = dateA < dateB ? 1 : -1;
-      }
-      else {
-        comparison = dateA > dateB ? 1 : -1;
-      }
-      return comparison;
-    }
-    this.allMovies.sort(compare);
+  sortByDate(type: SORT): void {
+    this.sortType = type;
   }
 
+  pageHandler(page: PageEvent): void {
+    this.page = page;
+  }
+
+  slicePage(allMovies: Movie[], page: PageEvent): Movie[] {
+    return allMovies.slice((page.pageIndex * page.pageSize), (page.pageIndex * page.pageSize) + page.pageSize);
+  }
+
+  compare(a: Movie, b: Movie, type: SORT): number {
+    const dateA = new Date(a.publishedAt);
+    const dateB = new Date(b.publishedAt);
+    let comparison = 0;
+    if (type === SORT.ASC) {
+      comparison = dateA < dateB ? 1 : -1;
+    }
+    else {
+      comparison = dateA > dateB ? 1 : -1;
+    }
+    return comparison;
+  }
 }
