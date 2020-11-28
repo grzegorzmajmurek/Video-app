@@ -16,10 +16,8 @@ export class ListItemComponent implements OnInit {
   constructor(public moviesService: MoviesService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    console.log('movie', this.movie)
-  }
-
-
+ }
+ 
   deleteMovie(id: number): void {
     this.moviesService.deleteMovie(id);
   }
@@ -28,13 +26,8 @@ export class ListItemComponent implements OnInit {
     this.moviesService.setFavourite(id);
   }
 
-  // deleteFavorite(id: number): void {
-  //   this.moviesService.deleteFavorite(id);
-  // }
-
   openDialog(url: string): void {
     this.dialog.open(DialogComponent, { data: { url } });
 
   }
-
 }

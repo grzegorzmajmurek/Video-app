@@ -9,7 +9,7 @@
 </mat-menu>
 <app-search-input (valueChanged)="handleValue($event)"></app-search-input>
 <mat-grid-list style="width: 100%;" [cols]="cols" [rowHeight]="rowHeight">
-  <mat-grid-tile *ngFor="let movie of allMovies" style="width: 100%;">
+  <mat-grid-tile *ngFor="let movie of sortedMoviesList" style="width: 100%;">
     <app-list-item [type]="type" [movie]="movie" style="width: 100%;"></app-list-item>
   </mat-grid-tile>
 </mat-grid-list>
@@ -25,3 +25,4 @@
     </div>
   </div>
   </ng-container>
+<app-paginator [length]="favourtiteMovies.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex" (page)="pageHandler($event)"></app-paginator>
