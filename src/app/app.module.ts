@@ -12,6 +12,7 @@ import { ApiService } from '../services/api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MoviesService } from '../services/movies.service';
 import { ListItemComponent } from '../shared-components/list-item/list-item.component';
+import { CheckBoxComponent } from '../shared-components/check-box/check-box.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ListItemComponent } from '../shared-components/list-item/list-item.comp
     SearchInputComponent,
     ButtonComponent,
     DialogComponent,
-    ListItemComponent
+    ListItemComponent,
+    CheckBoxComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

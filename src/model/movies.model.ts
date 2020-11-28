@@ -20,3 +20,8 @@ export enum VIDEO_WEBSITE {
     YOUTUBE = 'YOUTUBE',
     VIMEO = 'VIMEO'
 }
+
+export enum SORT {
+    ASC = 'ASCENDING',
+    DSC = 'DESCENDING'
+}

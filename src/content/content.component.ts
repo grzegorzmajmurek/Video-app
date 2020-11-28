@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VimeoApiResponse, YoutubeApiResponse } from '../model/api-response.model';
-import { DISPLAY_TYPE, Movie, VIDEO_WEBSITE } from '../model/movies.model';
+import { DISPLAY_TYPE, Movie, VIDEO_WEBSITE, SORT } from '../model/movies.model';
 import { ApiService } from '../services/api.service';
 import { MoviesService } from '../services/movies.service';
 import { extractIdAndWebsiteType } from '../utile/utile';
@@ -11,8 +11,10 @@ import { extractIdAndWebsiteType } from '../utile/utile';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
+  SORT = SORT;
   DISPLAY_TYPE = DISPLAY_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
+  onlyFavouriteMovie: boolean = false;
 
   constructor(public apiService: ApiService,
     public moviesService: MoviesService) { }
@@ -22,9 +24,10 @@ export class ContentComponent implements OnInit {
     this.moviesService.setMoviesFromLocalStorage();
   }
 
-
   get allMovies(): Movie[] {
-    return this.moviesService.allMovies;
+    const all = this.moviesService.allMovies;
+    const onlyFavourite = all.filter((movie: Movie) => movie.favourite === true);
+    return !this.onlyFavouriteMovie ? all : onlyFavourite;
   }
 
   get rowHeight(): string {
@@ -90,6 +93,26 @@ export class ContentComponent implements OnInit {
 
   changeDisplayType(type: DISPLAY_TYPE): void {
     this.type = type;
+  }
+
+  selectFavouriteMovies(onlyFavouriteMovie: boolean): void {
+    this.onlyFavouriteMovie = onlyFavouriteMovie;
+  }
+
+  sortByDate(date: SORT): void {
+    const compare = (a, b) => {
+      const dateA = new Date(a.publishedAt);
+      const dateB = new Date(b.publishedAt);
+      let comparison = 0;
+      if (date === SORT.ASC) {
+        comparison = dateA < dateB ? 1 : -1;
+      }
+      else {
+        comparison = dateA > dateB ? 1 : -1;
+      }
+      return comparison;
+    }
+    this.allMovies.sort(compare);
   }
 
 }
