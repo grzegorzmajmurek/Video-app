@@ -1,13 +1,13 @@
-import { Movie } from './../model/movies.model';
-import { Component, OnInit} from '@angular/core';
-import { VimeoApiResponse, YoutubeApiResponse } from '../model/api-response.model';
-import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '../model/movies.model';
-import { ApiService } from '../services/api.service';
-import { MoviesService } from '../services/movies.service';
-import { extractIdAndWebsiteType } from '../utile/utile';
+import { Movie } from '@model/movies.model';
+import { Component, OnInit } from '@angular/core';
+import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
+import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
+import { ApiService } from '@services/api.service';
+import { MoviesService } from '@services/movies.service';
+import { extractIdAndWebsiteType } from '@utile/utile';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '../shared-components/button/button.component';
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
 
 @Component({
   selector: 'app-content',
@@ -49,8 +49,8 @@ export class ContentComponent implements OnInit {
 
   get allMovies(): Movie[] {
     return this.moviesService.allMovies;
-
   }
+
   get favoriteMovies(): Movie[] {
     const onlyFavorite = this.allMovies.filter((movie: Movie) => movie.favorite === true);
     return !this.onlyFavoriteMovie ? this.allMovies : onlyFavorite;
@@ -92,7 +92,6 @@ export class ContentComponent implements OnInit {
     if (type === VIDEO_WEBSITE.YOUTUBE) {
       this.apiService.fetchYoutubeApi(idVideo)
         .subscribe((res: YoutubeApiResponse) => {
-
           if (res.items.length === 0) {
             this.openSnackBar('To jest niepoprawny link');
             return;

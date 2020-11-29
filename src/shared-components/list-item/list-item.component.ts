@@ -1,8 +1,8 @@
-import { BUTTON_TYPE } from './../button/button.component';
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
 import { Component, OnInit, Input } from '@angular/core';
-import { Movie, DISPLAY_TYPE } from '../../model/movies.model';
-import { MoviesService } from '../../services/movies.service';
-import { DialogComponent } from '../dialog/dialog.component';
+import { Movie, DISPLAY_TYPE } from '@model/movies.model';
+import { MoviesService } from '@services/movies.service';
+import { DialogComponent } from '@shared-components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
