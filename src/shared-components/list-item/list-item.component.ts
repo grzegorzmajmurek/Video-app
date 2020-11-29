@@ -17,13 +17,13 @@ export class ListItemComponent implements OnInit {
 
   ngOnInit(): void {
  }
- 
+
   deleteMovie(id: number): void {
     this.moviesService.deleteMovie(id);
   }
 
   setFavourite(id: number): void {
-    this.moviesService.setFavourite(id);
+    this.moviesService.setFavorite(id);
   }
 
   openDialog(url: string): void {

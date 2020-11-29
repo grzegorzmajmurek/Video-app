@@ -8,7 +8,7 @@ export interface Movie {
     viewCount: string;
     publishedAt: string;
     url: string;
-    favourite: boolean;
+    favorite: boolean;
 }
 
 export enum DISPLAY_TYPE {

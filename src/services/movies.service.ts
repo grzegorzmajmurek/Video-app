@@ -22,7 +22,7 @@ export class MoviesService {
             const lastElement: Movie = this.movies.slice(-1).pop();
             movie.id = lastElement.id + 1;
         }
-        this.movies.push(movie);
+        this.movies.unshift(movie);
         this.updateLocalStorage();
 
     }
@@ -33,27 +33,27 @@ export class MoviesService {
         this.updateLocalStorage();
     }
 
-    setFavourite(id: number): void {
+    setFavorite(id: number): void {
         const movie = this.movies.find(x => x.id === id);
-        movie.favourite = true;
+        movie.favorite = true;
         this.updateLocalStorage();
     }
 
     deleteFavorite(id: number): void {
         const movie = this.movies.find(x => x.id === id);
-        movie.favourite = false;
+        movie.favorite = false;
         this.updateLocalStorage();
     }
 
     setMoviesFromLocalStorage(): void {
-        const movies = JSON.parse(localStorage.getItem("movies"));
+        const movies = JSON.parse(localStorage.getItem('movies'));
         if (movies !== null) {
             this.movies = movies;
         }
     }
 
     updateLocalStorage(): void {
-        localStorage.setItem("movies", JSON.stringify(this.movies));
+        localStorage.setItem('movies', JSON.stringify(this.movies));
     }
 }
 

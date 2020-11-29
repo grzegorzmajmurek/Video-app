@@ -19,7 +19,7 @@ export class ContentComponent implements OnInit {
   sortType: SORT = SORT.ASC;
   DISPLAY_TYPE = DISPLAY_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
-  onlyFavouriteMovie: boolean = false;
+  onlyFavoriteMovie = false;
   page: PageEvent = {
     pageIndex: 0,
     pageSize: 3,
@@ -28,7 +28,7 @@ export class ContentComponent implements OnInit {
   sortedMovies: Movie[] = [];
 
   constructor(public apiService: ApiService,
-    public moviesService: MoviesService, public snackBar: MatSnackBar) { }
+              public moviesService: MoviesService, public snackBar: MatSnackBar) { }
 
 
   ngOnInit(): void {
@@ -36,11 +36,11 @@ export class ContentComponent implements OnInit {
   }
 
   get sortedMoviesList(): Movie[] {
-    let sliceMovies = this.slicePage(this.favourtiteMovies, this.page);
+    let sliceMovies = this.slicePage(this.favoriteMovies, this.page);
     if (sliceMovies.length === 0) {
       const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
       this.page = { ...this.page, ...{ pageIndex: newPageIndex } };
-      sliceMovies = this.slicePage(this.favourtiteMovies, this.page);
+      sliceMovies = this.slicePage(this.favoriteMovies, this.page);
     }
     return sliceMovies.sort((a, b) => this.compare(a, b, this.sortType));
   }
@@ -49,9 +49,9 @@ export class ContentComponent implements OnInit {
     return this.moviesService.allMovies;
 
   }
-  get favourtiteMovies(): Movie[] {
-    const onlyFavourite = this.allMovies.filter((movie: Movie) => movie.favourite === true);
-    return !this.onlyFavouriteMovie ? this.allMovies : onlyFavourite;
+  get favoriteMovies(): Movie[] {
+    const onlyFavorite = this.allMovies.filter((movie: Movie) => movie.favorite === true);
+    return !this.onlyFavoriteMovie ? this.allMovies : onlyFavorite;
   }
 
   get rowHeight(): string {
@@ -77,22 +77,22 @@ export class ContentComponent implements OnInit {
             viewCount: '',
             publishedAt: res.created_time,
             url: `https://player.vimeo.com/video/${idVideo}`,
-            favourite: false
+            favorite: false
           };
           this.moviesService.addMovie(movie);
         },
           (err) => {
-            this.openSnackBar('To jest niepoprawny link')
-            console.error('Handle error from Vimeo', err)
+            this.openSnackBar('To jest niepoprawny link');
+            console.error('Handle error from Vimeo', err);
           }
-        )
+        );
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
       this.apiService.fetchYoutubeApi(idVideo)
         .subscribe((res: YoutubeApiResponse) => {
 
           if (res.items.length === 0) {
-            this.openSnackBar('To jest niepoprawny link')
+            this.openSnackBar('To jest niepoprawny link');
             return;
           }
           const { id, snippet, statistics } = res.items[0];
@@ -107,7 +107,7 @@ export class ContentComponent implements OnInit {
             viewCount: statistics.viewCount,
             publishedAt: snippet.publishedAt,
             url: `https://www.youtube.com/embed/${id}`,
-            favourite: false
+            favorite: false
           };
           this.moviesService.addMovie(movie);
         },
@@ -120,8 +120,8 @@ export class ContentComponent implements OnInit {
     this.value = valueFromInput;
     const { idVideo, videoWebsite } = extractIdAndWebsiteType(valueFromInput);
     const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);
-    if (movieExist){
-      this.openSnackBar('Ten film już istnieje')
+    if (movieExist) {
+      this.openSnackBar('Ten film już istnieje');
       return;
     }
     this.handleApiResponse(videoWebsite, idVideo);
@@ -137,7 +137,7 @@ export class ContentComponent implements OnInit {
   }
 
   selectFavouriteMovies(onlyFavouriteMovie: boolean): void {
-    this.onlyFavouriteMovie = onlyFavouriteMovie;
+    this.onlyFavoriteMovie = onlyFavouriteMovie;
   }
 
   sortByDate(type: SORT): void {

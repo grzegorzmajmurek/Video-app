@@ -5,7 +5,7 @@ export interface YoutubeApiResponse {
     pageInfo: {
         totalResults: number;
         resultsPerPage: number;
-    }
+    };
 }
 
 export interface YoutubeApiItemResponse {
@@ -40,7 +40,7 @@ export interface YoutubeApiItemResponse {
         dislikeCount: string;
         favoriteCount: string;
         commentCount: string;
-    }
+    };
 
 }
 
@@ -60,7 +60,7 @@ export interface VimeoApiResponse {
     created_time: string;
     pictures: {
         sizes: PictureSize[];
-    }
+    };
 }
 
 export interface PictureSize {

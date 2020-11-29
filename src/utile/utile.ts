@@ -4,7 +4,7 @@ export interface IdAndWebsiteType {
     idVideo: string;
     videoWebsite: VIDEO_WEBSITE;
 }
-const digits_only = (string: string) => [...string].every(c => '0123456789'.includes(c));
+const digitsOnly = (digits: string) => [...digits].every(c => '0123456789'.includes(c));
 
 const substringLink = (searchedText: string, link: string) => {
     const n = link.lastIndexOf(searchedText);
@@ -12,11 +12,11 @@ const substringLink = (searchedText: string, link: string) => {
 };
 const extractType = (link: string): VIDEO_WEBSITE => {
     let videoWebsite: VIDEO_WEBSITE;
-    if (link.includes('youtube.com/') || link.includes('youtu.be/') || (!digits_only(link) && !link.includes('.com/'))) {
-        videoWebsite = VIDEO_WEBSITE.YOUTUBE
+    if (link.includes('youtube.com/') || link.includes('youtu.be/') || (!digitsOnly(link) && !link.includes('.com/'))) {
+        videoWebsite = VIDEO_WEBSITE.YOUTUBE;
     }
-    if (link.includes('vimeo.com/') || (digits_only(link) && !link.includes('.com/'))) {
-        videoWebsite = VIDEO_WEBSITE.VIMEO
+    if (link.includes('vimeo.com/') || (digitsOnly(link) && !link.includes('.com/'))) {
+        videoWebsite = VIDEO_WEBSITE.VIMEO;
     }
     return videoWebsite;
 };
@@ -41,5 +41,5 @@ export const extractIdAndWebsiteType = (link: string): IdAndWebsiteType => {
     return {
         idVideo: extractId(link),
         videoWebsite: extractType(link)
-    }
+    };
 };
