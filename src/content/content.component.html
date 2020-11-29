@@ -7,7 +7,7 @@
   <button mat-menu-item>Item 1</button>
   <button mat-menu-item>Item 2</button>
 </mat-menu>
-<app-search-input (valueChanged)="handleValue($event)"></app-search-input>
+<app-search-input [value]='value' (valueChanged)="handleValue($event)"></app-search-input>
 <mat-grid-list style="width: 100%;" [cols]="cols" [rowHeight]="rowHeight">
   <mat-grid-tile *ngFor="let movie of sortedMoviesList" style="width: 100%;">
     <app-list-item [type]="type" [movie]="movie" style="width: 100%;"></app-list-item>
