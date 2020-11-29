@@ -1,5 +1,5 @@
 import { Movie } from './../model/movies.model';
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { VimeoApiResponse, YoutubeApiResponse } from '../model/api-response.model';
 import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '../model/movies.model';
 import { ApiService } from '../services/api.service';
@@ -136,7 +136,7 @@ export class ContentComponent implements OnInit {
     this.type = type;
   }
 
-  selectFavouriteMovies(onlyFavouriteMovie: boolean): void {
+  selectFavoriteMovies(onlyFavouriteMovie: boolean): void {
     this.onlyFavoriteMovie = onlyFavouriteMovie;
   }
 
