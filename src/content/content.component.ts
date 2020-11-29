@@ -6,6 +6,7 @@ import { ApiService } from '../services/api.service';
 import { MoviesService } from '../services/movies.service';
 import { extractIdAndWebsiteType } from '../utile/utile';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-content',
@@ -13,6 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
+  value = '';
   SORT = SORT;
   sortType: SORT = SORT.ASC;
   DISPLAY_TYPE = DISPLAY_TYPE;
@@ -26,7 +28,7 @@ export class ContentComponent implements OnInit {
   sortedMovies: Movie[] = [];
 
   constructor(public apiService: ApiService,
-    public moviesService: MoviesService) { }
+    public moviesService: MoviesService, public snackBar: MatSnackBar) { }
 
 
   ngOnInit(): void {
@@ -61,7 +63,6 @@ export class ContentComponent implements OnInit {
   }
 
   handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
-    console.log(type);
     if (type === VIDEO_WEBSITE.VIMEO) {
       this.apiService.fetchVimeoApi(idVideo)
         .subscribe((res: VimeoApiResponse) => {
@@ -79,11 +80,21 @@ export class ContentComponent implements OnInit {
             favourite: false
           };
           this.moviesService.addMovie(movie);
-        })
+        },
+          (err) => {
+            this.openSnackBar('To jest niepoprawny link')
+            console.error('Handle error from Vimeo', err)
+          }
+        )
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
       this.apiService.fetchYoutubeApi(idVideo)
         .subscribe((res: YoutubeApiResponse) => {
+
+          if (res.items.length === 0) {
+            this.openSnackBar('To jest niepoprawny link')
+            return;
+          }
           const { id, snippet, statistics } = res.items[0];
           const movie: Movie = {
             movieId: id,
@@ -99,12 +110,20 @@ export class ContentComponent implements OnInit {
             favourite: false
           };
           this.moviesService.addMovie(movie);
-        });
+        },
+          (err) => console.error('Handle error from Youtube', err)
+        );
     }
   }
 
   handleValue(valueFromInput: any): void {
+    this.value = valueFromInput;
     const { idVideo, videoWebsite } = extractIdAndWebsiteType(valueFromInput);
+    const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);
+    if (movieExist){
+      this.openSnackBar('Ten film już istnieje')
+      return;
+    }
     this.handleApiResponse(videoWebsite, idVideo);
   }
 
@@ -145,4 +164,12 @@ export class ContentComponent implements OnInit {
     }
     return comparison;
   }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Zamknij', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
 }

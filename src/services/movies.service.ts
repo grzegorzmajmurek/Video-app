@@ -47,7 +47,9 @@ export class MoviesService {
 
     setMoviesFromLocalStorage(): void {
         const movies = JSON.parse(localStorage.getItem("movies"));
-        this.movies = movies;
+        if (movies !== null) {
+            this.movies = movies;
+        }
     }
 
     updateLocalStorage(): void {
