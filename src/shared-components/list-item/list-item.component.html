@@ -1,4 +1,4 @@
-<ng-container *ngIf="type === DISPLAY_TYPE.LIST; else card">
+<ng-container *ngIf="type === DISPLAY_TYPE.LIST || type === DISPLAY_TYPE.LIST_FAVORITE; else card">
   <mat-card style="width:100%; display: flex;">
     <div style="align-self: center;">
       <ng-container [ngTemplateOutlet]="imageSection" [ngTemplateOutletContext]="{movie:movie}">
@@ -8,7 +8,7 @@
       <p>{{movie.title}}</p>
       <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
       <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
-      <ng-container [ngTemplateOutlet]="actionButton" [ngTemplateOutletContext]="{movie:movie}">
+      <ng-container [ngTemplateOutlet]="type === DISPLAY_TYPE.LIST?actionButton :actionButtonFavorite" [ngTemplateOutletContext]="{movie:movie}">
       </ng-container>
     </div>
   </mat-card>
@@ -35,7 +35,7 @@
     (buttonClick)="openDialog(movie.url)"></app-button>
   <app-button label="Usuń" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
     (buttonClick)="deleteMovie(movie.id)"></app-button>
-  <app-button **ngIf="movie.favorite === true" label="Dodaj do ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="favorite_border" color="accent"
+  <app-button label="Dodaj do ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="favorite_border" color="accent"
     (buttonClick)="setFavourite(movie.id)"></app-button>
   </ng-template>
 
@@ -43,4 +43,12 @@
     <img mat-card-image [src]="movie.image.url" width="movie.image.width" height="movie.image.height"
       (click)="openDialog(movie.url)">
   </ng-template>
+
+  <ng-template #actionButtonFavorite let-movie="movie">
+    <app-button label="Odtwórz" [type]="BUTTON_TYPE.MINI_FAB" icon="play_arrow" color="primary"
+    (buttonClick)="openDialog(movie.url)"></app-button>
+  <app-button label="Usuń" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
+    (buttonClick)="deleteMovie(movie.id)"></app-button>
+  </ng-template>
+  
   

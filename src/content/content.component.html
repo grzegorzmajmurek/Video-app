@@ -33,7 +33,7 @@
       <div style="overflow: auto">
         <div *ngFor="let movie of allMovies">
           <div *ngIf="movie.favorite">
-            <app-list-item [type]="DISPLAY_TYPE.LIST" [movie]="movie" class="w-100"></app-list-item>
+            <app-list-item [type]="DISPLAY_TYPE.LIST_FAVORITE" [movie]="movie" class="w-100"></app-list-item>
           </div>
         </div>
       </div>

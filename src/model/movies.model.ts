@@ -13,7 +13,8 @@ export interface Movie {
 
 export enum DISPLAY_TYPE {
     CARD = 'CARD',
-    LIST = 'LIST'
+    LIST = 'LIST',
+    LIST_FAVORITE = 'LIST_FAVORITE'
 }
 
 export enum VIDEO_WEBSITE {

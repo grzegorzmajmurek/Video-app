@@ -133,11 +133,6 @@ export class ContentComponent implements OnInit {
     this.moviesService.deleteAllMovies();
   }
 
-
-  deleteFavorite(id: number): void {
-    this.moviesService.deleteFavorite(id);
-  }
-
   changeDisplayType(type: DISPLAY_TYPE): void {
     this.type = type;
   }

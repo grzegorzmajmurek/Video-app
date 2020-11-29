@@ -30,6 +30,9 @@ export class ListItemComponent implements OnInit {
 
   openDialog(url: string): void {
     this.dialog.open(DialogComponent, { data: { url } });
+  }
 
+  deleteFavorite(id: number): void {
+    this.moviesService.deleteFavorite(id);
   }
 }
