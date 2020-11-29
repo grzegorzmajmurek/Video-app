@@ -1,7 +1,8 @@
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
 import { Component, OnInit, Input } from '@angular/core';
-import { Movie, DISPLAY_TYPE } from '../../model/movies.model';
-import { MoviesService } from '../../services/movies.service';
-import { DialogComponent } from '../dialog/dialog.component';
+import { Movie, DISPLAY_TYPE } from '@model/movies.model';
+import { MoviesService } from '@services/movies.service';
+import { DialogComponent } from '@shared-components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -13,6 +14,7 @@ export class ListItemComponent implements OnInit {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
+  BUTTON_TYPE = BUTTON_TYPE;
   constructor(public moviesService: MoviesService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -28,6 +30,9 @@ export class ListItemComponent implements OnInit {
 
   openDialog(url: string): void {
     this.dialog.open(DialogComponent, { data: { url } });
+  }
 
+  deleteFavorite(id: number): void {
+    this.moviesService.deleteFavorite(id);
   }
 }

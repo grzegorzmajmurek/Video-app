@@ -1,28 +1,42 @@
-<app-check-box label="Tylko ulubione" [checked]="onlyFavoriteMovie" (isChecked)="selectFavoriteMovies($event)"></app-check-box>
-<app-button label="Lista" (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
-<app-button label="Kafelki" (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
-<app-button label="Ostatnio dodane" (buttonClick)="sortByDate(SORT.ASC)"></app-button>
-<app-button label="Najstarsze" (buttonClick)="sortByDate(SORT.DSC)"></app-button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
-<app-search-input [value]='value' (valueChanged)="handleValue($event)"></app-search-input>
-<mat-grid-list style="width: 100%;" [cols]="cols" [rowHeight]="rowHeight">
-  <mat-grid-tile *ngFor="let movie of sortedMoviesList" style="width: 100%;">
-    <app-list-item [type]="type" [movie]="movie" style="width: 100%;"></app-list-item>
-  </mat-grid-tile>
-</mat-grid-list>
-<ng-container >
-  <div *ngFor="let movie of allMovies">
-    <div *ngIf="movie.favorite">
-      <p>Tylko ulubione</p>
-      <img [src]="movie.image.url" width="movie.image.width" height="movie.image.height"
-        (click)="openDialog(movie.url)">
-      <p>Ilosc wyswietlen: <span>{{movie.viewCount}}</span></p>
-      <p>Opublikowany: <span>{{movie.publishedAt}}</span></p>
-      <app-button label="Usuń z ulubionych" (buttonClick)="deleteFavorite(movie.id)"></app-button>
+<div class="flex column">
+  <div class="align-center p-25">
+    <app-search-input [value]='value' (valueChanged)="handleValue($event)"></app-search-input>
+  </div>
+
+  <div class="flex">
+    <div class="flex column w-80">
+
+      <mat-toolbar>
+        <app-check-box label="Tylko ulubione" [checked]="onlyFavoriteMovie" (isChecked)="selectFavoriteMovies($event)">
+        </app-check-box>
+        <app-button label="Usuń wszystkie filmy" (buttonClick)="deleteAllMovies()"></app-button>
+        <app-button label="Lista" (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
+        <app-button label="Kafelki" (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
+        <app-button label="Ostatnio dodane" (buttonClick)="sortByDate(SORT.ASC)"></app-button>
+        <app-button label="Najstarsze" (buttonClick)="sortByDate(SORT.DSC)"></app-button>
+      </mat-toolbar>
+      <div>
+        <mat-grid-list class="w-100" [cols]="cols" [rowHeight]="rowHeight">
+          <mat-grid-tile *ngFor="let movie of sortedMoviesList" class="w-100">
+            <app-list-item [type]="type" [movie]="movie" class="w-100"></app-list-item>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+      <div>
+        <app-paginator [length]="favoriteMovies.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
+          (page)="pageHandler($event)"></app-paginator>
+      </div>
+    </div>
+    <!-- ulubione -->
+    <div class="w-20 flex column">
+      <mat-toolbar><span>Ulubione:</span></mat-toolbar>
+      <div style="overflow: auto">
+        <div *ngFor="let movie of allMovies">
+          <div *ngIf="movie.favorite">
+            <app-list-item [type]="DISPLAY_TYPE.LIST_FAVORITE" [movie]="movie" class="w-100"></app-list-item>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  </ng-container>
-<app-paginator [length]="favoriteMovies.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex" (page)="pageHandler($event)"></app-paginator>
+</div>

@@ -1,4 +1,4 @@
-import { VIDEO_WEBSITE } from '../model/movies.model';
+import { VIDEO_WEBSITE } from '@model/movies.model';
 
 export interface IdAndWebsiteType {
     idVideo: string;
