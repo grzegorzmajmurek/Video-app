@@ -1,3 +1,4 @@
+import { BUTTON_TYPE } from './../button/button.component';
 import { Component, OnInit, Input } from '@angular/core';
 import { Movie, DISPLAY_TYPE } from '../../model/movies.model';
 import { MoviesService } from '../../services/movies.service';
@@ -13,6 +14,7 @@ export class ListItemComponent implements OnInit {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
+  BUTTON_TYPE = BUTTON_TYPE;
   constructor(public moviesService: MoviesService, public dialog: MatDialog) { }
 
   ngOnInit(): void {

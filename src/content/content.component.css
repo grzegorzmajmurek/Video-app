@@ -1,0 +1,27 @@
+.flex {
+    display: flex;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.align-center {
+    align-self: center;
+}
+
+.p-25 {
+    padding: 25px;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.w-100 {
+    width: 100%;
+}

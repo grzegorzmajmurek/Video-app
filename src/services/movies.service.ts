@@ -19,12 +19,17 @@ export class MoviesService {
         if (this.movies.length === 0) {
             movie.id = 0;
         } else {
-            const lastElement: Movie = this.movies.slice(-1).pop();
+            const lastElement: Movie = this.movies[0];
             movie.id = lastElement.id + 1;
         }
         this.movies.unshift(movie);
         this.updateLocalStorage();
 
+    }
+
+    deleteAllMovies(): void {
+        this.movies = [];
+        this.updateLocalStorage();
     }
 
     deleteMovie(id: number): void {

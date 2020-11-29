@@ -7,6 +7,7 @@ import { MoviesService } from '../services/movies.service';
 import { extractIdAndWebsiteType } from '../utile/utile';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BUTTON_TYPE } from '../shared-components/button/button.component';
 
 @Component({
   selector: 'app-content',
@@ -18,6 +19,7 @@ export class ContentComponent implements OnInit {
   SORT = SORT;
   sortType: SORT = SORT.ASC;
   DISPLAY_TYPE = DISPLAY_TYPE;
+  BUTTON_TYPE = BUTTON_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavoriteMovie = false;
   page: PageEvent = {
@@ -125,6 +127,10 @@ export class ContentComponent implements OnInit {
       return;
     }
     this.handleApiResponse(videoWebsite, idVideo);
+  }
+
+  deleteAllMovies(): void {
+    this.moviesService.deleteAllMovies();
   }
 
 
