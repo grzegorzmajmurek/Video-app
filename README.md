@@ -35,5 +35,5 @@ export const environment = {
 ## HINT
  
 Jeżeli pojawi się bład w trakcie odtwarzania filmu związany :
-[Strict Content Security Policy] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
+[Strict Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
 Należy wyłączyć AdBlock
