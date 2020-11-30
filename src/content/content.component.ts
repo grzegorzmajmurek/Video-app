@@ -1,4 +1,4 @@
-import { Movie } from '@model/movies.model';
+import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
 import { Component, OnInit } from '@angular/core';
 import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
 import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
@@ -23,45 +23,41 @@ export class ContentComponent implements OnInit {
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavoriteMovie = false;
   page: PageEvent = {
-    pageIndex: 0,
-    pageSize: 3,
+    pageIndex: DEFAULT_PAGE_INDEX,
+    pageSize: DEFAULT_PAGE_SIZE,
     length: this.allMovies.length,
   };
-  sortedMovies: Movie[] = [];
+  managedMovies: Movie[] = [];
 
   constructor(public apiService: ApiService,
-              public moviesService: MoviesService, public snackBar: MatSnackBar) { }
+              public moviesService: MoviesService,
+              public snackBar: MatSnackBar) {
+              }
 
 
   ngOnInit(): void {
     this.moviesService.setMoviesFromLocalStorage();
+    this.managedMovies = this.allMovies;
   }
 
   get sortedMoviesList(): Movie[] {
-    let sliceMovies = this.slicePage(this.favoriteMovies, this.page);
+    let sliceMovies = this.slicePage(this.managedMovies, this.page);
     if (sliceMovies.length === 0) {
       const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
       this.page = { ...this.page, ...{ pageIndex: newPageIndex } };
-      sliceMovies = this.slicePage(this.favoriteMovies, this.page);
+      sliceMovies = this.slicePage(this.managedMovies, this.page);
     }
-    return sliceMovies.sort((a, b) => this.compare(a, b, this.sortType));
+    return sliceMovies;
   }
 
   get allMovies(): Movie[] {
-    return this.moviesService.allMovies;
+    const all = this.moviesService.allMovies;
+    const onlyFavorite = all.filter((movie: Movie) => movie.favorite === true);
+    return this.onlyFavoriteMovie ? onlyFavorite : all;
   }
 
-  get favoriteMovies(): Movie[] {
-    const onlyFavorite = this.allMovies.filter((movie: Movie) => movie.favorite === true);
-    return !this.onlyFavoriteMovie ? this.allMovies : onlyFavorite;
-  }
-
-  get rowHeight(): string {
-    return this.type === DISPLAY_TYPE.LIST ? '4:1' : '1:2';
-  }
-
-  get cols(): string {
-    return this.type === DISPLAY_TYPE.LIST ? '1' : '4';
+  get getListClass(): string {
+    return this.type === DISPLAY_TYPE.LIST ? 'column' : 'wrap';
   }
 
   handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
@@ -70,11 +66,7 @@ export class ContentComponent implements OnInit {
         .subscribe((res: VimeoApiResponse) => {
           const movie: Movie = {
             movieId: idVideo,
-            image: {
-              url: res.pictures.sizes[0].link,
-              width: res.pictures.sizes[0].width,
-              height: res.pictures.sizes[0].height
-            },
+            imageUrl: res.pictures.sizes[0].link,
             title: res.name,
             viewCount: '',
             publishedAt: res.created_time,
@@ -99,11 +91,7 @@ export class ContentComponent implements OnInit {
           const { id, snippet, statistics } = res.items[0];
           const movie: Movie = {
             movieId: id,
-            image: {
-              url: snippet.thumbnails.default.url,
-              width: snippet.thumbnails.default.width,
-              height: snippet.thumbnails.default.height,
-            },
+            imageUrl: snippet.thumbnails.default.url,
             title: snippet.title,
             viewCount: statistics.viewCount,
             publishedAt: snippet.publishedAt,
@@ -136,12 +124,14 @@ export class ContentComponent implements OnInit {
     this.type = type;
   }
 
-  selectFavoriteMovies(onlyFavouriteMovie: boolean): void {
-    this.onlyFavoriteMovie = onlyFavouriteMovie;
+  selectFavoriteMovies(onlyFavoriteMovie: boolean): void {
+    this.onlyFavoriteMovie = onlyFavoriteMovie;
+    this.managedMovies = this.allMovies;
   }
 
   sortByDate(type: SORT): void {
     this.sortType = type;
+    this.managedMovies = this.managedMovies.sort((a, b) => this.compare(a, b, type));
   }
 
   pageHandler(page: PageEvent): void {
@@ -158,8 +148,7 @@ export class ContentComponent implements OnInit {
     let comparison = 0;
     if (type === SORT.ASC) {
       comparison = dateA < dateB ? 1 : -1;
-    }
-    else {
+    } else {
       comparison = dateA > dateB ? 1 : -1;
     }
     return comparison;

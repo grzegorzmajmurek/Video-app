@@ -17,6 +17,9 @@
       ],
       "@utile/*":[
         "./utile/*"
+      ],
+      "@environments/*":[
+        "./environments/*"
       ]
     }
   },
@@ -27,4 +30,5 @@
   "include": [
     "src/**/*.d.ts"
   ]
+
 }

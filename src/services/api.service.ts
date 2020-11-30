@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { YoutubeApiResponse, VimeoApiResponse } from '../model/api-response.model';
+import { YoutubeApiResponse, VimeoApiResponse } from '@model/api-response.model';
+import { environment } from '@environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,7 @@ export class ApiService {
         let params = new HttpParams();
         const data = {
             part: 'snippet',
-            key: 'AIzaSyAVPRtNBbTqBey08rHQRrZPQHgDWYCFcr4',
+            key: environment.key.youtube,
             maxResults: 10,
             id: value
         };
@@ -29,7 +30,7 @@ export class ApiService {
         let headers = new HttpHeaders();
         headers = headers
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'bearer cd8e334981fc10547fc7fce998372490')
+        .set('Authorization', `bearer ${environment.key.vimeo}`)
         .set('Accept', 'application/vnd.vimeo.user+json;version=3.0,application/vnd.vimeo.video+json;version=3.4');
         return  this.httpClient.get(`https://api.vimeo.com/videos/${id}`, { headers }) as Observable<VimeoApiResponse>;
     }
