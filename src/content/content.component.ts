@@ -118,6 +118,7 @@ export class ContentComponent implements OnInit {
 
   deleteAllMovies(): void {
     this.moviesService.deleteAllMovies();
+    this.managedMovies = this.allMovies;
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
