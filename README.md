@@ -31,3 +31,9 @@ export const environment = {
     vimeo: `${YOUTUBE_SECRET_KEY}`
   }
 };
+
+## HINT
+ 
+Jeżeli pojawi się bład w trakcie odtwarzania filmu związany :
+[Strict Content Security Policy] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
+Należy wyłączyć AdBlock
