@@ -1,27 +1,33 @@
-# VideoApp
+# VIDEO-APP
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
+### Celem zadania było zbudowanie aplikacji do odtwarzania i przechowywania filmów z Youtube i Vimeo
 
-## Development server
+## Instalacja
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* `npm install` - zainstalowanie paczek zdefiniowanych w pliku package.json
+* `npm run start` - uruchomienie aplikacji angularowej na porcie `4200`
 
-## Code scaffolding
+## Użyte frameworki i bibioteki
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Angular 11.0.0            https://angular.io/
+* Angular Material 10.2.7   https://material.angular.io/
 
-## Build
+## Użyte zewnętrzne API
+* Youtube API               https://developers.google.com/youtube/v3
+* Vimeo API                 https://developer.vimeo.com/
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Użycie
 
-## Running unit tests
+Aplikacja poprawnie wyświetla się na desktopie.
+Aplikacja poprawnie wyświetla się na wszystkich popularnych przeglądarkach.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Secret Key
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Uzupełnij `Secret Key` odpowiednio do Youtube/Vimeo
+```
+export const environment = {
+  key: {
+    youtube: `${YOUTUBE_SECRET_KEY}`,
+    vimeo: `${YOUTUBE_SECRET_KEY}`
+  }
+};

@@ -1,1 +1,5 @@
-<button mat-button (click)="onClick()">{{label}}</button>
+<button *ngIf="type === BUTTON_TYPE.BASIC" [color]="color" mat-raised-button (click)="onClick()">{{label}}</button>
+<button *ngIf="type === BUTTON_TYPE.MINI_FAB" mat-mini-fab class="mx-10" [color]="color" (click)="onClick()"
+  [matTooltip]="label">
+  <mat-icon>{{icon}}</mat-icon>
+</button>
