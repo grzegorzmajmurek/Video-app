@@ -20,3 +20,14 @@
 
 Aplikacja poprawnie wyświetla się na desktopie.
 Aplikacja poprawnie wyświetla się na wszystkich popularnych przeglądarkach.
+
+## Secret Key
+
+Uzupełnij `Secret Key` odpowiednio do Youtube/Vimeo
+```
+export const environment = {
+  key: {
+    youtube: `${YOUTUBE_SECRET_KEY}`,
+    vimeo: `${YOUTUBE_SECRET_KEY}`
+  }
+};

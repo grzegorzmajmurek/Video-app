@@ -1,5 +1,19 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-body,html {
-    height: 100%;
-    font-family: 'Roboto', sans-serif;
+
+body,
+html {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-self: center;
 }
