@@ -31,7 +31,7 @@ export const environment = {
     vimeo: `${YOUTUBE_SECRET_KEY}`
   }
 };
-
+```
 ## HINT
  
 Jeżeli pojawi się bład w trakcie odtwarzania filmu związany :
