@@ -1,13 +1,12 @@
-import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
 import { Component, OnInit } from '@angular/core';
-import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
-import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
-import { ApiService } from '@services/api.service';
-import { MoviesService } from '@services/movies.service';
-import { extractIdAndWebsiteType } from '@utile/utile';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
+import { BUTTON_TYPE } from '../../../shared/button/button.component';
+import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '../../model/movies.model';
+import { ApiService } from '../../services/api.service';
+import { MoviesService } from '../../services/movies.service';
+import { VimeoApiResponse, YoutubeApiResponse } from '../../model/api-response.model';
+import { extractIdAndWebsiteType } from '../../utile/utile';
 
 @Component({
   selector: 'app-content',
@@ -105,7 +104,7 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  handleValue(valueFromInput: any): void {
+  handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
     const { idVideo, videoWebsite } = extractIdAndWebsiteType(valueFromInput);
     const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);

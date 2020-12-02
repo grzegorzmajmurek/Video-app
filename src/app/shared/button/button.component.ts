@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export enum BUTTON_TYPE {
   BASIC,
@@ -11,7 +11,7 @@ export enum BUTTON_TYPE {
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss']
 })
-export class ButtonComponent implements OnInit {
+export class ButtonComponent{
 
   @Input() label = '';
   @Input() icon = '';
@@ -19,11 +19,7 @@ export class ButtonComponent implements OnInit {
   @Input() type: BUTTON_TYPE = BUTTON_TYPE.BASIC;
   @Output() buttonClick = new EventEmitter<void>();
   BUTTON_TYPE = BUTTON_TYPE;
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+ 
   onClick(): void {
     this.buttonClick.emit();
   }

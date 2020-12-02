@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { YoutubeApiResponse, VimeoApiResponse } from '@model/api-response.model';
-import { environment } from '@environments/environment';
+import { YoutubeApiResponse, VimeoApiResponse } from '../model/api-response.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root',

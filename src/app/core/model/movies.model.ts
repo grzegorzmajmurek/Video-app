@@ -1,5 +1,3 @@
-import { Thumbnails } from './api-response.model';
-
 export interface Movie {
     id?: number;
     movieId: string;

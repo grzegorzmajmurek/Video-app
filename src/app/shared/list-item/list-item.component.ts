@@ -1,24 +1,21 @@
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
-import { Component, OnInit, Input } from '@angular/core';
-import { Movie, DISPLAY_TYPE } from '@model/movies.model';
-import { MoviesService } from '@services/movies.service';
-import { DialogComponent } from '@shared-components/dialog/dialog.component';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { BUTTON_TYPE } from '../button/button.component';
+import { DialogComponent } from '../dialog/dialog.component';
+import { Movie, DISPLAY_TYPE } from '../../core/model/movies.model';
+import { MoviesService } from '../../core/services/movies.service';
 
 @Component({
   selector: 'app-list-item',
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.scss']
 })
-export class ListItemComponent implements OnInit {
+export class ListItemComponent {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
   BUTTON_TYPE = BUTTON_TYPE;
   constructor(public moviesService: MoviesService, public dialog: MatDialog) { }
-
-  ngOnInit(): void {
- }
 
   deleteMovie(id: number): void {
     this.moviesService.deleteMovie(id);
