@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-list-item',
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.css']
+  styleUrls: ['./list-item.component.scss']
 })
 export class ListItemComponent implements OnInit {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;

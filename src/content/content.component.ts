@@ -12,7 +12,7 @@ import { BUTTON_TYPE } from '@shared-components/button/button.component';
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.css']
+  styleUrls: ['./content.component.scss']
 })
 export class ContentComponent implements OnInit {
   value = '';
