@@ -8,7 +8,7 @@
       <p>Ilość wyświetleń: <span>{{movie.viewCount}}</span></p>
       <p>Opublikowany: <span>{{movie.publishedAt | date }}</span></p>
       <ng-container [ngTemplateOutlet]="type === DISPLAY_TYPE.LIST?actionButton :actionButtonFavorite"
-        [ngTemplateOutletContext]="{movie:movie}">
+                    [ngTemplateOutletContext]="{movie:movie}">
       </ng-container>
     </div>
   </div>
@@ -31,16 +31,16 @@
 
 <ng-template #actionButton let-movie="movie">
   <app-button label="Odtwórz" [type]="BUTTON_TYPE.MINI_FAB" icon="play_arrow" color="primary"
-    (buttonClick)="openDialog(movie.url)"></app-button>
+              (buttonClick)="openDialog(movie.url)"></app-button>
   <app-button label="Usuń" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
-    (buttonClick)="deleteMovie(movie.id)"></app-button>
+              (buttonClick)="deleteMovie(movie.id)"></app-button>
   <app-button label="Dodaj do ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="favorite_border" color="accent"
-    (buttonClick)="setFavourite(movie.id)"></app-button>
+              (buttonClick)="setFavourite(movie.id)"></app-button>
 </ng-template>
 
 <ng-template #actionButtonFavorite let-movie="movie">
   <app-button label="Odtwórz" [type]="BUTTON_TYPE.MINI_FAB" icon="play_arrow" color="primary"
-    (buttonClick)="openDialog(movie.url)"></app-button>
+              (buttonClick)="openDialog(movie.url)"></app-button>
   <app-button label="Usuń z ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
-    (buttonClick)="deleteFavorite(movie.id)"></app-button>
+              (buttonClick)="deleteFavorite(movie.id)"></app-button>
 </ng-template>

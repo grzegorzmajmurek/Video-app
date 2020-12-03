@@ -1,5 +1,5 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-paginator',

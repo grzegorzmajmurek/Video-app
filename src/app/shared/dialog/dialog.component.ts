@@ -1,6 +1,6 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dialog',
@@ -9,7 +9,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class DialogComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { url: string }, private dom: DomSanitizer) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { url: string }, private dom: DomSanitizer) {
+  }
 
   get url(): SafeUrl {
     return this.dom.bypassSecurityTrustResourceUrl(this.data.url);

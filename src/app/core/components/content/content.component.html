@@ -12,16 +12,16 @@
         <div>
           <span>Przełącz</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_agenda" label="Lista"
-            (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
+                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_module" label="Kafelki"
-            (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
+                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
         </div>
         <div>
           <span>Sortuj</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_top" label="Ostatnio dodane"
-            (buttonClick)="sortByDate(SORT.ASC)"></app-button>
+                      (buttonClick)="sortByDate(SORT.ASC)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_bottom" label="Najstarsze"
-            (buttonClick)="sortByDate(SORT.DSC)"></app-button>
+                      (buttonClick)="sortByDate(SORT.DSC)"></app-button>
         </div>
       </mat-toolbar>
 
@@ -32,7 +32,7 @@
       </div>
       <div class="mb-70">
         <app-paginator [length]="allMovies.length" [pageSize]="pageOption.pageSize" [pageIndex]="pageOption.pageIndex"
-          (page)="pageHandler($event)">
+                       (page)="pageHandler($event)">
         </app-paginator>
       </div>
     </div>

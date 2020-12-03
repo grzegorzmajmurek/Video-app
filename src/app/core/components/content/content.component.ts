@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '@shared/button/button.component';
-import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '@model/movies.model';
-import { MoviesService } from '@services/movies.service';
+import {Component, OnInit} from '@angular/core';
+import {PageEvent} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {BUTTON_TYPE} from '@shared/button/button.component';
+import {Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE} from '@model/movies.model';
+import {MoviesService} from '@services/movies.service';
 
 @Component({
   selector: 'app-content',
@@ -38,7 +38,7 @@ export class ContentComponent implements OnInit {
     let sliceMovies = this.slicePage(this.managedMovies, this.pageOption);
     if (sliceMovies.length === 0) {
       const newPageIndex = this.pageOption.pageIndex !== 0 ? this.pageOption.pageIndex - 1 : 0;
-      this.pageOption = { ...this.pageOption, ...{ pageIndex: newPageIndex } };
+      this.pageOption = {...this.pageOption, ...{pageIndex: newPageIndex}};
       sliceMovies = this.slicePage(this.managedMovies, this.pageOption);
     }
     return sliceMovies;

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 export enum BUTTON_TYPE {
   BASIC,
@@ -11,7 +11,7 @@ export enum BUTTON_TYPE {
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss']
 })
-export class ButtonComponent{
+export class ButtonComponent {
 
   @Input() label = '';
   @Input() icon = '';
