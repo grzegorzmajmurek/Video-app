@@ -5,7 +5,7 @@ import { BUTTON_TYPE } from '../../../shared/button/button.component';
 import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '../../model/movies.model';
 import { YoutubeApiService } from '../../services/youtube-api.service';
 import { MoviesService } from '../../services/movies.service';
-import { VimeoApiResponse, YoutubeApiResponse } from '../../model/api-response.model';
+import { YoutubeApiResponse } from '../../model/api-response.model';
 import { extractIdAndWebsiteType } from '../../utile/utile';
 import { VimeoApiService } from '../../services/vimeo-api.service';
 
@@ -30,10 +30,10 @@ export class ContentComponent implements OnInit {
   managedMovies: Movie[] = [];
 
   constructor(public youtubeApiService: YoutubeApiService,
-              public moviesService: MoviesService,
-              public snackBar: MatSnackBar,
-              public vimeoApiService: VimeoApiService) {
-              }
+    public moviesService: MoviesService,
+    public snackBar: MatSnackBar,
+    public vimeoApiService: VimeoApiService) {
+  }
 
 
   ngOnInit(): void {
@@ -63,46 +63,11 @@ export class ContentComponent implements OnInit {
 
   handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
     if (type === VIDEO_WEBSITE.VIMEO) {
-      this.vimeoApiService.fetchVimeoApi(idVideo)
-        .subscribe((res: VimeoApiResponse) => {
-          const movie: Movie = {
-            movieId: idVideo,
-            imageUrl: res.pictures.sizes[0].link,
-            title: res.name,
-            viewCount: '',
-            publishedAt: res.created_time,
-            url: `https://player.vimeo.com/video/${idVideo}`,
-            favorite: false
-          };
-          this.moviesService.addMovie(movie);
-        },
-          (err) => {
-            this.openSnackBar('To jest niepoprawny link');
-            console.error('Handle error from Vimeo', err);
-          }
-        );
+      this.vimeoApiService.addMovie(idVideo);
     }
+
     if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.youtubeApiService.fetchYoutubeApi(idVideo)
-        .subscribe((res: YoutubeApiResponse) => {
-          if (res.items.length === 0) {
-            this.openSnackBar('To jest niepoprawny link');
-            return;
-          }
-          const { id, snippet, statistics } = res.items[0];
-          const movie: Movie = {
-            movieId: id,
-            imageUrl: snippet.thumbnails.default.url,
-            title: snippet.title,
-            viewCount: statistics.viewCount,
-            publishedAt: snippet.publishedAt,
-            url: `https://www.youtube.com/embed/${id}`,
-            favorite: false
-          };
-          this.moviesService.addMovie(movie);
-        },
-          (err) => console.error('Handle error from Youtube', err)
-        );
+      this.youtubeApiService.addMovie(idVideo);
     }
   }
 
