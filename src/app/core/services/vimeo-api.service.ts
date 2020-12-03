@@ -1,10 +1,10 @@
-import { Movie } from './../model/movies.model';
+import { Movie } from '@model/movies.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { VimeoApiResponse } from '../model/api-response.model';
-import { environment } from '../../../environments/environment';
-import { substringLink } from '../utile/utile';
+import { VimeoApiResponse } from '@model/api-response.model';
+import { environment } from '@environments/environment';
+import { substringLink } from '@utile/utile';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -27,16 +27,16 @@ export class VimeoApiService {
         const id = this.extractId(link);
         return this.fetchVimeoApi(id).pipe(
             map((res: VimeoApiResponse) => {
-            return {
-                movieId: id,
-                imageUrl: res.pictures.sizes[0].link,
-                title: res.name,
-                viewCount: '',
-                publishedAt: res.created_time,
-                url: `https://player.vimeo.com/video/${id}`,
-                favorite: false
-            };
-        })
+                return {
+                    movieId: id,
+                    imageUrl: res.pictures.sizes[0].link,
+                    title: res.name,
+                    viewCount: '',
+                    publishedAt: res.created_time,
+                    url: `https://player.vimeo.com/video/${id}`,
+                    favorite: false
+                };
+            })
         );
     }
 
@@ -44,10 +44,6 @@ export class VimeoApiService {
         if (link.includes('https://') || link.includes('.com/')) {
             return substringLink('vimeo.com/', link);
         }
-
         return link;
     }
 }
-
-
-

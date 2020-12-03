@@ -1,4 +1,4 @@
-import { Movie } from './../model/movies.model';
+import { Movie } from '@model/movies.model';
 import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root',

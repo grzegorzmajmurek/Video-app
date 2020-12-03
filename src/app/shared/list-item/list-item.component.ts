@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BUTTON_TYPE } from '../button/button.component';
 import { DialogComponent } from '../dialog/dialog.component';
-import { Movie, DISPLAY_TYPE } from '../../core/model/movies.model';
-import { MoviesService } from '../../core/services/movies.service';
+import { Movie, DISPLAY_TYPE } from '@model/movies.model';
+import { MoviesService } from '@services/movies.service';
 
 @Component({
   selector: 'app-list-item',

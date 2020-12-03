@@ -1,4 +1,4 @@
-import { VIDEO_WEBSITE } from '../model/movies.model';
+import { VIDEO_WEBSITE } from '@model/movies.model';
 
 const digitsOnly = (digits: string) => [...digits].every(c => '0123456789'.includes(c));
 

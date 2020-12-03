@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="mb-70">
-        <app-paginator [length]="allMovies.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
+        <app-paginator [length]="allMovies.length" [pageSize]="pageOption.pageSize" [pageIndex]="pageOption.pageIndex"
           (page)="pageHandler($event)">
         </app-paginator>
       </div>

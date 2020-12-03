@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '../../../shared/button/button.component';
-import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '../../model/movies.model';
-import { MoviesService } from '../../services/movies.service';
+import { BUTTON_TYPE } from '@shared/button/button.component';
+import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '@model/movies.model';
+import { MoviesService } from '@services/movies.service';
 
 @Component({
   selector: 'app-content',
@@ -18,7 +18,7 @@ export class ContentComponent implements OnInit {
   BUTTON_TYPE = BUTTON_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavoriteMovie = false;
-  page: PageEvent = {
+  pageOption: PageEvent = {
     pageIndex: DEFAULT_PAGE_INDEX,
     pageSize: DEFAULT_PAGE_SIZE,
     length: this.allMovies.length,
@@ -35,11 +35,11 @@ export class ContentComponent implements OnInit {
   }
 
   get sortedMoviesList(): Movie[] {
-    let sliceMovies = this.slicePage(this.managedMovies, this.page);
+    let sliceMovies = this.slicePage(this.managedMovies, this.pageOption);
     if (sliceMovies.length === 0) {
-      const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
-      this.page = { ...this.page, ...{ pageIndex: newPageIndex } };
-      sliceMovies = this.slicePage(this.managedMovies, this.page);
+      const newPageIndex = this.pageOption.pageIndex !== 0 ? this.pageOption.pageIndex - 1 : 0;
+      this.pageOption = { ...this.pageOption, ...{ pageIndex: newPageIndex } };
+      sliceMovies = this.slicePage(this.managedMovies, this.pageOption);
     }
     return sliceMovies;
   }
@@ -56,7 +56,12 @@ export class ContentComponent implements OnInit {
 
   handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
-    this.moviesService.selectTypeAndManageAddingMovie(valueFromInput);
+    this.moviesService.managedAddingMovie(valueFromInput)
+      .subscribe(movieAdded => {
+        if (!movieAdded) {
+          this.openSnackBar('Ten film już istnieje lub podałeś błędny link!');
+        }
+      });
   }
 
   deleteAllMovies(): void {
@@ -78,8 +83,8 @@ export class ContentComponent implements OnInit {
     this.managedMovies = this.managedMovies.sort((a, b) => this.compare(a, b, type));
   }
 
-  pageHandler(page: PageEvent): void {
-    this.page = page;
+  pageHandler(pageOption: PageEvent): void {
+    this.pageOption = pageOption;
   }
 
   slicePage(allMovies: Movie[], page: PageEvent): Movie[] {
