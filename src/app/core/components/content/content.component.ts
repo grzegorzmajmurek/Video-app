@@ -3,10 +3,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BUTTON_TYPE } from '../../../shared/button/button.component';
 import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '../../model/movies.model';
-import { ApiService } from '../../services/api.service';
+import { YoutubeApiService } from '../../services/youtube-api.service';
 import { MoviesService } from '../../services/movies.service';
 import { VimeoApiResponse, YoutubeApiResponse } from '../../model/api-response.model';
 import { extractIdAndWebsiteType } from '../../utile/utile';
+import { VimeoApiService } from '../../services/vimeo-api.service';
 
 @Component({
   selector: 'app-content',
@@ -28,9 +29,10 @@ export class ContentComponent implements OnInit {
   };
   managedMovies: Movie[] = [];
 
-  constructor(public apiService: ApiService,
+  constructor(public youtubeApiService: YoutubeApiService,
               public moviesService: MoviesService,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              public vimeoApiService: VimeoApiService) {
               }
 
 
@@ -61,7 +63,7 @@ export class ContentComponent implements OnInit {
 
   handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
     if (type === VIDEO_WEBSITE.VIMEO) {
-      this.apiService.fetchVimeoApi(idVideo)
+      this.vimeoApiService.fetchVimeoApi(idVideo)
         .subscribe((res: VimeoApiResponse) => {
           const movie: Movie = {
             movieId: idVideo,
@@ -81,7 +83,7 @@ export class ContentComponent implements OnInit {
         );
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.apiService.fetchYoutubeApi(idVideo)
+      this.youtubeApiService.fetchYoutubeApi(idVideo)
         .subscribe((res: YoutubeApiResponse) => {
           if (res.items.length === 0) {
             this.openSnackBar('To jest niepoprawny link');

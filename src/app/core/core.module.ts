@@ -6,8 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../shared/shared.module';
 import { AppMaterialModule } from './app-material.module';
-import { ApiService } from './services/api.service';
+import { YoutubeApiService } from './services/youtube-api.service';
 import { MoviesService } from './services/movies.service';
+import { VimeoApiService } from './services/vimeo-api.service';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,10 @@ import { MoviesService } from './services/movies.service';
     AppMaterialModule
   ],
   providers: [
-    ApiService,
+    YoutubeApiService,
+    VimeoApiService,
     MoviesService
+    
   ],
   bootstrap: [HomeComponent]
 })
