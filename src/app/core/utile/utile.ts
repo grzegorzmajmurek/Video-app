@@ -1,45 +1,19 @@
 import { VIDEO_WEBSITE } from '../model/movies.model';
 
-export interface IdAndWebsiteType {
-    idVideo: string;
-    videoWebsite: VIDEO_WEBSITE;
-}
 const digitsOnly = (digits: string) => [...digits].every(c => '0123456789'.includes(c));
 
-const substringLink = (searchedText: string, link: string) => {
+export const substringLink = (searchedText: string, link: string) => {
     const n = link.lastIndexOf(searchedText);
     return link.substring(n + searchedText.length);
 };
-const extractType = (link: string): VIDEO_WEBSITE => {
-    let videoWebsite: VIDEO_WEBSITE;
-    if (link.includes('youtube.com/') || link.includes('youtu.be/') || (!digitsOnly(link) && !link.includes('.com/'))) {
-        videoWebsite = VIDEO_WEBSITE.YOUTUBE;
-    }
-    if (link.includes('vimeo.com/') || (digitsOnly(link) && !link.includes('.com/'))) {
-        videoWebsite = VIDEO_WEBSITE.VIMEO;
-    }
-    return videoWebsite;
-};
 
-const extractId = (link: string): string => {
-    if (link.includes('https://') || link.includes('.com/')) {
-        const url = new URL(link);
-        if (link.includes('youtube.com/')) {
-            return url.searchParams.get('v');
-        }
-        if (link.includes('youtu.be/')) {
-            return substringLink('youtu.be/', link);
-        }
-        if (link.includes('vimeo.com/')) {
-            return substringLink('vimeo.com/', link);
-        }
+export const extractType = (link: string): VIDEO_WEBSITE => {
+    // https://stackoverflow.com/a/31617794
+    if (link.match(/^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/) || digitsOnly(link)) {
+        return VIDEO_WEBSITE.VIMEO;
     }
-    return link;
-};
-
-export const extractIdAndWebsiteType = (link: string): IdAndWebsiteType => {
-    return {
-        idVideo: extractId(link),
-        videoWebsite: extractType(link)
-    };
+    // https://stackoverflow.com/a/45426669
+    if (link.match(/^.*(youtu\.be\/|vi?\/|u\/\w\/|embed\/|\?vi?=|\&vi?=)([^#\&\?]*).*/) || !digitsOnly(link)) {
+        return VIDEO_WEBSITE.YOUTUBE;
+    }
 };

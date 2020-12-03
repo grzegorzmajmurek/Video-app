@@ -1,17 +1,18 @@
 import { Movie } from './../model/movies.model';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VimeoApiResponse } from '../model/api-response.model';
 import { environment } from '../../../environments/environment';
-import { MoviesService } from './movies.service';
+import { substringLink } from '../utile/utile';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class VimeoApiService {
 
-    constructor(public httpClient: HttpClient, public moviesService: MoviesService) { }
+    constructor(public httpClient: HttpClient) { }
 
     private fetchVimeoApi(id: string): Observable<VimeoApiResponse> {
         let headers = new HttpHeaders();
@@ -22,9 +23,11 @@ export class VimeoApiService {
         return this.httpClient.get(`https://api.vimeo.com/videos/${id}`, { headers }) as Observable<VimeoApiResponse>;
     }
 
-    addMovie(id: string) {
-        this.fetchVimeoApi(id).subscribe((res: VimeoApiResponse) => {
-            const movie: Movie = {
+    addMovie(link: string): Observable<Movie> {
+        const id = this.extractId(link);
+        return this.fetchVimeoApi(id).pipe(
+            map((res: VimeoApiResponse) => {
+            return {
                 movieId: id,
                 imageUrl: res.pictures.sizes[0].link,
                 title: res.name,
@@ -33,8 +36,18 @@ export class VimeoApiService {
                 url: `https://player.vimeo.com/video/${id}`,
                 favorite: false
             };
-            this.moviesService.addMovie(movie);
-        });
+        })
+        );
     }
 
+    extractId(link: string): string {
+        if (link.includes('https://') || link.includes('.com/')) {
+            return substringLink('vimeo.com/', link);
+        }
+
+        return link;
+    }
 }
+
+
+

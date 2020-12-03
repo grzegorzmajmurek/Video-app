@@ -3,11 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BUTTON_TYPE } from '../../../shared/button/button.component';
 import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, VIDEO_WEBSITE } from '../../model/movies.model';
-import { YoutubeApiService } from '../../services/youtube-api.service';
 import { MoviesService } from '../../services/movies.service';
-import { YoutubeApiResponse } from '../../model/api-response.model';
-import { extractIdAndWebsiteType } from '../../utile/utile';
-import { VimeoApiService } from '../../services/vimeo-api.service';
 
 @Component({
   selector: 'app-content',
@@ -29,15 +25,12 @@ export class ContentComponent implements OnInit {
   };
   managedMovies: Movie[] = [];
 
-  constructor(public youtubeApiService: YoutubeApiService,
-    public moviesService: MoviesService,
-    public snackBar: MatSnackBar,
-    public vimeoApiService: VimeoApiService) {
+  constructor(public moviesService: MoviesService,
+              public snackBar: MatSnackBar) {
   }
 
-
   ngOnInit(): void {
-    this.moviesService.setMoviesFromLocalStorage();
+    this.moviesService.updateMovies();
     this.managedMovies = this.allMovies;
   }
 
@@ -61,25 +54,9 @@ export class ContentComponent implements OnInit {
     return this.type === DISPLAY_TYPE.LIST ? 'column' : 'wrap';
   }
 
-  handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
-    if (type === VIDEO_WEBSITE.VIMEO) {
-      this.vimeoApiService.addMovie(idVideo);
-    }
-
-    if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.youtubeApiService.addMovie(idVideo);
-    }
-  }
-
   handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
-    const { idVideo, videoWebsite } = extractIdAndWebsiteType(valueFromInput);
-    const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);
-    if (movieExist) {
-      this.openSnackBar('Ten film już istnieje');
-      return;
-    }
-    this.handleApiResponse(videoWebsite, idVideo);
+    this.moviesService.selectTypeAndManageAddingMovie(valueFromInput);
   }
 
   deleteAllMovies(): void {

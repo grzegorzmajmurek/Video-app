@@ -19,7 +19,7 @@ export class ButtonComponent{
   @Input() type: BUTTON_TYPE = BUTTON_TYPE.BASIC;
   @Output() buttonClick = new EventEmitter<void>();
   BUTTON_TYPE = BUTTON_TYPE;
- 
+
   onClick(): void {
     this.buttonClick.emit();
   }

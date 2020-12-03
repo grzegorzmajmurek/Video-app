@@ -4,16 +4,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { YoutubeApiResponse } from '../model/api-response.model';
 import { environment } from '../../../environments/environment';
-import { MoviesService } from './movies.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class YoutubeApiService {
 
-    constructor(public httpClient: HttpClient, public moviesService: MoviesService) { }
+    constructor(public httpClient: HttpClient) { }
 
-    fetchYoutubeApi(value: string): Observable<YoutubeApiResponse> {
+    private fetchYoutubeApi(value: string): Observable<YoutubeApiResponse> {
         let params = new HttpParams();
         const data = {
             part: 'snippet',
@@ -28,26 +28,27 @@ export class YoutubeApiService {
         return this.httpClient.get('https://www.googleapis.com/youtube/v3/videos', { params }) as Observable<YoutubeApiResponse>;
     }
 
-
-    addMovie(id: string) {
-        this.fetchYoutubeApi(id)
-            .subscribe((res: YoutubeApiResponse) => {
-                const { id, snippet, statistics } = res.items[0];
-                const movie: Movie = {
-                    movieId: id,
-                    imageUrl: snippet.thumbnails.default.url,
-                    title: snippet.title,
-                    viewCount: statistics.viewCount,
-                    publishedAt: snippet.publishedAt,
-                    url: `https://www.youtube.com/embed/${id}`,
-                    favorite: false
-                };
-                this.moviesService.addMovie(movie);
-            },
-                (err) => console.error('Handle error from Youtube', err)
+    addMovie(link: string): Observable<Movie> {
+        const videoId = this.extractId(link);
+        return this.fetchYoutubeApi(videoId)
+            .pipe(
+                map((res: YoutubeApiResponse) => {
+                    const { id, snippet, statistics } = res.items[0];
+                    return {
+                        movieId: id,
+                        imageUrl: snippet.thumbnails.default.url,
+                        title: snippet.title,
+                        viewCount: statistics.viewCount,
+                        publishedAt: snippet.publishedAt,
+                        url: `https://www.youtube.com/embed/${id}`,
+                        favorite: false
+                    };
+                })
             );
     }
-};
-
-
-
+    extractId(link: string): string {
+        // https://stackoverflow.com/a/54200105
+        const url = link.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+        return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0];
+    }
+}

@@ -9,14 +9,15 @@ import { AppMaterialModule } from './app-material.module';
 import { YoutubeApiService } from './services/youtube-api.service';
 import { MoviesService } from './services/movies.service';
 import { VimeoApiService } from './services/vimeo-api.service';
+import { LocalStorageService } from './services/local-storage.service';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ContentComponent,
-    
+
   ],
-  
+
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -27,8 +28,8 @@ import { VimeoApiService } from './services/vimeo-api.service';
   providers: [
     YoutubeApiService,
     VimeoApiService,
-    MoviesService
-    
+    MoviesService,
+    LocalStorageService
   ],
   bootstrap: [HomeComponent]
 })
