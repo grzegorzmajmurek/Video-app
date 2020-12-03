@@ -1,0 +1,46 @@
+<ng-container *ngIf="type === DISPLAY_TYPE.LIST || type === DISPLAY_TYPE.LIST_FAVORITE; else card">
+  <div class="w-100 flex">
+    <div class="align-center">
+      <img [src]="movie.imageUrl" width="120px" height="90px" (click)="openDialog(movie.url)">
+    </div>
+    <div class="p-20">
+      <p>{{movie.title}}</p>
+      <p>Ilość wyświetleń: <span>{{movie.viewCount}}</span></p>
+      <p>Opublikowany: <span>{{movie.publishedAt | date }}</span></p>
+      <ng-container [ngTemplateOutlet]="type === DISPLAY_TYPE.LIST?actionButton :actionButtonFavorite"
+                    [ngTemplateOutletContext]="{movie:movie}">
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #card>
+  <mat-card class="card-container">
+    <img mat-card-image [src]="movie.imageUrl" (click)="openDialog(movie.url)">
+    <mat-card-content>
+      <h5>{{movie.title}}</h5>
+      <p>Ilość wyświetleń: <span>{{movie.viewCount}}</span></p>
+      <p>Opublikowany: <span>{{movie.publishedAt | date }}</span></p>
+    </mat-card-content>
+    <mat-card-actions>
+      <ng-container [ngTemplateOutlet]="actionButton" [ngTemplateOutletContext]="{movie:movie}">
+      </ng-container>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<ng-template #actionButton let-movie="movie">
+  <app-button label="Odtwórz" [type]="BUTTON_TYPE.MINI_FAB" icon="play_arrow" color="primary"
+              (buttonClick)="openDialog(movie.url)"></app-button>
+  <app-button label="Usuń" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
+              (buttonClick)="deleteMovie(movie.id)"></app-button>
+  <app-button label="Dodaj do ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="favorite_border" color="accent"
+              (buttonClick)="setFavourite(movie.id)"></app-button>
+</ng-template>
+
+<ng-template #actionButtonFavorite let-movie="movie">
+  <app-button label="Odtwórz" [type]="BUTTON_TYPE.MINI_FAB" icon="play_arrow" color="primary"
+              (buttonClick)="openDialog(movie.url)"></app-button>
+  <app-button label="Usuń z ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
+              (buttonClick)="deleteFavorite(movie.id)"></app-button>
+</ng-template>

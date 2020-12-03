@@ -7,16 +7,16 @@
     "types": [],
     "paths": {
       "@services/*": [
-        "./services/*"
+        "./app/core/services/*"
       ],
       "@model/*": [
-        "./model/*"
+        "./app/core/model/*"
       ],
-      "@shared-components/*":[
-        "./shared-components/*"
+      "@shared/*":[
+        "./app/shared/*"
       ],
       "@utile/*":[
-        "./utile/*"
+        "./app/core/utile/*"
       ],
       "@environments/*":[
         "./environments/*"
