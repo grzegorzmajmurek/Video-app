@@ -23,8 +23,8 @@ export class ListItemComponent {
     this.moviesService.deleteMovie(id);
   }
 
-  setFavourite(id: number): void {
-    this.moviesService.setFavorite(id);
+  setFavorite(id: number): void {
+    this.moviesService.setFavorite(id, true);
   }
 
   openDialog(url: string): void {
@@ -32,6 +32,6 @@ export class ListItemComponent {
   }
 
   deleteFavorite(id: number): void {
-    this.moviesService.deleteFavorite(id);
+    this.moviesService.setFavorite(id, false);
   }
 }

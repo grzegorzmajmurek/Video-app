@@ -1,12 +1,12 @@
-import {Movie} from '@model/movies.model';
-import {Injectable} from '@angular/core';
-import {VIDEO_WEBSITE} from '@model/movies.model';
-import {extractType} from '@utile/utile';
-import {YoutubeApiService} from './youtube-api.service';
-import {VimeoApiService} from './vimeo-api.service';
-import {LocalStorageService} from './local-storage.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Movie } from '@model/movies.model';
+import { Injectable } from '@angular/core';
+import { VIDEO_WEBSITE } from '@model/movies.model';
+import { extractType } from '@utile/utile';
+import { YoutubeApiService } from './youtube-api.service';
+import { VimeoApiService } from './vimeo-api.service';
+import { LocalStorageService } from './local-storage.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,15 +14,16 @@ import {map} from 'rxjs/operators';
 
 export class MoviesService {
 
+  private movies$: BehaviorSubject<Movie[]> = new BehaviorSubject<Movie[]>([]);
+  public readonly moviesObs: Observable<Movie[]> = this.movies$.asObservable();
+
   constructor(public youtubeService: YoutubeApiService,
-              public vimeoService: VimeoApiService,
-              public localStorage: LocalStorageService) {
+    public vimeoService: VimeoApiService,
+    public localStorage: LocalStorageService) {
   }
 
-  movies: Movie[] = [];
-
-  get allMovies(): Movie[] {
-    return this.movies;
+  get movies(): Movie[] {
+    return this.movies$.getValue();
   }
 
   managedAddingMovie(link: string): Observable<boolean> {
@@ -43,36 +44,27 @@ export class MoviesService {
       const lastElement: Movie = this.movies[0];
       movie.id = lastElement.id + 1;
     }
-    this.movies.unshift(movie);
-    this.localStorage.updateLocalStorage(this.movies);
-
+    this.updateMoviesAndLocalStorage([movie, ...this.movies]);
   }
 
   deleteAllMovies(): void {
-    this.movies = [];
-    this.localStorage.updateLocalStorage(this.movies);
+    this.updateMoviesAndLocalStorage([]);
   }
 
   deleteMovie(id: number): void {
-    const index = this.movies.findIndex(x => x.id === id);
-    this.movies.splice(index, 1);
-    this.localStorage.updateLocalStorage(this.movies);
+    const newMovies = this.movies.filter(movie => movie.id !== id);
+    this.updateMoviesAndLocalStorage(newMovies);
   }
 
-  setFavorite(id: number): void {
-    const movie = this.movies.find(x => x.id === id);
-    movie.favorite = true;
-    this.localStorage.updateLocalStorage(this.movies);
-  }
-
-  deleteFavorite(id: number): void {
-    const movie = this.movies.find(x => x.id === id);
-    movie.favorite = false;
-    this.localStorage.updateLocalStorage(this.movies);
+  setFavorite(id: number, favorite: boolean): void {
+    const newMovies = [...this.movies];
+    const movie = newMovies.find(x => x.id === id);
+    movie.favorite = favorite;
+    this.updateMoviesAndLocalStorage(newMovies);
   }
 
   updateMovies(): void {
-    this.movies = this.localStorage.setMoviesFromLocalStorage();
+    this.movies$.next(this.localStorage.setMoviesFromLocalStorage());
   }
 
   movieExist(movie: Movie): boolean {
@@ -88,4 +80,8 @@ export class MoviesService {
     return added;
   }
 
+  updateMoviesAndLocalStorage(movies: Movie[]): void {
+    this.movies$.next(movies);
+    this.localStorage.updateLocalStorage(this.movies);
+  }
 }
