@@ -1,5 +1,5 @@
-import {Movie} from '@model/movies.model';
-import {Injectable} from '@angular/core';
+import { Movie } from '@model/movies.model';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,7 @@ export class LocalStorageService {
   }
 
   setMoviesFromLocalStorage(): Movie[] {
-    return JSON.parse(localStorage.getItem('movies'));
+    const storage = JSON.parse(localStorage.getItem('movies'));
+    return storage === null ? [] : storage;
   }
 }

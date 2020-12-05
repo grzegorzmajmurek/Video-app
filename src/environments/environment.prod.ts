@@ -1,7 +1,7 @@
 export const environment = {
   key: {
     youtube: '',
-    vimeo: '',
+    vimeo: ''
   },
   production: true
 };
