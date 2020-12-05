@@ -7,7 +7,6 @@ import {PageEvent} from '@angular/material/paginator';
   styleUrls: ['./paginator.component.scss']
 })
 export class PaginatorComponent {
-
   @Input() length: number;
   @Input() pageSize: number;
   @Input() pageIndex: number;

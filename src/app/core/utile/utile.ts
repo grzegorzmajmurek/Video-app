@@ -5,8 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 const digitsOnly = (digits: string) => [...digits].every(c => '0123456789'.includes(c));
 
 export const substringLink = (searchedText: string, link: string) => {
-  const n = link.lastIndexOf(searchedText);
-  return link.substring(n + searchedText.length);
+  const lastIndex = link.lastIndexOf(searchedText);
+  return link.substring(lastIndex + searchedText.length);
 };
 
 export const extractType = (link: string): VIDEO_WEBSITE => {
@@ -22,7 +22,7 @@ export const extractType = (link: string): VIDEO_WEBSITE => {
 
 export const slicePage = (allMovies: Movie[], page: PageEvent): Movie[] => {
   return allMovies.slice((page.pageIndex * page.pageSize), (page.pageIndex * page.pageSize) + page.pageSize);
-}
+};
 
 export const compareByDate = (a: Movie, b: Movie, type: SORT): number => {
   const dateA = new Date(a.publishedAt);
@@ -34,4 +34,4 @@ export const compareByDate = (a: Movie, b: Movie, type: SORT): number => {
     comparison = dateA > dateB ? 1 : -1;
   }
   return comparison;
-}
+};

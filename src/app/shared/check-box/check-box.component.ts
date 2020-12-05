@@ -6,8 +6,6 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
   styleUrls: ['./check-box.component.scss']
 })
 export class CheckBoxComponent {
-
-
   @Input() label = '';
   @Input() checked = false;
   @Output() isChecked = new EventEmitter<boolean>();
@@ -15,5 +13,4 @@ export class CheckBoxComponent {
   onChecked(value: boolean): void {
     this.isChecked.emit(value);
   }
-
 }

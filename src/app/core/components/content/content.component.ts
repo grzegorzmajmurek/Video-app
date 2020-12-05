@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {PageEvent} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BUTTON_TYPE} from '@shared/button/button.component';
-import {Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from '@model/movies.model';
-import {MoviesService} from '@services/movies.service';
+import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BUTTON_TYPE } from '@shared/button/button.component';
+import { Movie, SORT, DISPLAY_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
+import { MoviesService } from '@services/movies.service';
 import { Observable } from 'rxjs';
 import { DEFAULT_PAGE_LENGTH } from '@model/movies.model';
 import { map } from 'rxjs/operators';
@@ -27,10 +27,10 @@ export class ContentComponent implements OnInit {
     length: DEFAULT_PAGE_LENGTH,
   };
   movies$: Observable<Movie[]>;
-  managedMovies$: Observable<Movie[]>
+  managedMovies$: Observable<Movie[]>;
 
   constructor(public moviesService: MoviesService,
-              public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -52,6 +52,8 @@ export class ContentComponent implements OnInit {
         if (!movieAdded) {
           this.openSnackBar('Ten film już istnieje lub podałeś błędny link!');
         }
+      }, err => {
+        this.openSnackBar('Podałeś błędny link!');
       });
   }
 
@@ -70,7 +72,7 @@ export class ContentComponent implements OnInit {
   }
 
   sortByDate(type: SORT): void {
-  this.managedMovies$ = this.movies$.pipe(map(movies => movies.sort((a ,b) => compareByDate(a, b, type))));
+    this.managedMovies$ = this.movies$.pipe(map(movies => movies.sort((a, b) => compareByDate(a, b, type))));
   }
 
   pageHandler(pageOption: PageEvent): void {
@@ -84,7 +86,7 @@ export class ContentComponent implements OnInit {
         let sliceMovies = slicePage(movies, this.pageOption);
         if (sliceMovies.length === 0) {
           const newPageIndex = this.pageOption.pageIndex !== 0 ? this.pageOption.pageIndex - 1 : 0;
-          this.pageOption = {...this.pageOption, ...{pageIndex: newPageIndex}};
+          this.pageOption = { ...this.pageOption, ...{ pageIndex: newPageIndex } };
           sliceMovies = slicePage(movies, this.pageOption);
         }
         return sliceMovies;
@@ -98,5 +100,4 @@ export class ContentComponent implements OnInit {
       verticalPosition: 'top',
     });
   }
-
 }

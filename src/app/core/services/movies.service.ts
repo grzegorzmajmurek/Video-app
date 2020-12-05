@@ -18,8 +18,8 @@ export class MoviesService {
   public readonly moviesObs: Observable<Movie[]> = this.movies$.asObservable();
 
   constructor(public youtubeService: YoutubeApiService,
-    public vimeoService: VimeoApiService,
-    public localStorage: LocalStorageService) {
+              public vimeoService: VimeoApiService,
+              public localStorage: LocalStorageService) {
   }
 
   get movies(): Movie[] {
@@ -37,7 +37,6 @@ export class MoviesService {
   }
 
   addMovie(movie: Movie): void {
-
     if (this.movies.length === 0) {
       movie.id = 0;
     } else {
