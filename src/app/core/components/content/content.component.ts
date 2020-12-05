@@ -27,17 +27,28 @@ export class ContentComponent implements OnInit {
     length: DEFAULT_PAGE_LENGTH,
   };
   movies$: Observable<Movie[]>;
-  managedMovies$: Observable<Movie[]>;
 
   constructor(public moviesService: MoviesService,
-    public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
     this.moviesService.updateMovies();
     this.movies$ = this.moviesService.moviesObs;
-    this.managedMovies$ = this.movies$;
-    this.displayMovieByPageOption();
+  }
+
+  get displayMovieByPageOption(): Observable<Movie[]> {
+    return this.movies$.pipe(
+      map(movies => {
+        let sliceMovies = slicePage(movies, this.pageOption);
+        if (sliceMovies.length === 0) {
+          const newPageIndex = this.pageOption.pageIndex !== 0 ? this.pageOption.pageIndex - 1 : 0;
+          this.pageOption = { ...this.pageOption, ...{ pageIndex: newPageIndex } };
+          sliceMovies = slicePage(movies, this.pageOption);
+        }
+        return sliceMovies;
+      })
+    );
   }
 
   get getListClass(): string {
@@ -46,7 +57,7 @@ export class ContentComponent implements OnInit {
 
   handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
-    this.displayMovieByPageOption();
+    this.movies$ = this.moviesService.moviesObs;
     this.moviesService.managedAddingMovie(valueFromInput)
       .subscribe(movieAdded => {
         if (!movieAdded) {
@@ -67,31 +78,16 @@ export class ContentComponent implements OnInit {
 
   selectFavoriteMovies(onlyFavoriteMovie: boolean): void {
     this.onlyFavoriteMovie = onlyFavoriteMovie;
-    const onlyFavorite = this.movies$.pipe(map(movies => movies.filter((movie: Movie) => movie.favorite === true)));
-    this.managedMovies$ = this.onlyFavoriteMovie ? onlyFavorite : this.movies$;
+    const onlyFavorite = this.movies$.pipe(map(movies => movies.filter(movie => movie.favorite)));
+    this.movies$ = this.onlyFavoriteMovie ? onlyFavorite : this.moviesService.moviesObs;
   }
 
   sortByDate(type: SORT): void {
-    this.managedMovies$ = this.movies$.pipe(map(movies => movies.sort((a, b) => compareByDate(a, b, type))));
+    this.movies$ = this.movies$.pipe(map(movies => movies.sort((a, b) => compareByDate(a, b, type))));
   }
 
   pageHandler(pageOption: PageEvent): void {
     this.pageOption = pageOption;
-    this.displayMovieByPageOption();
-  }
-
-  displayMovieByPageOption(): void {
-    this.managedMovies$ = this.movies$.pipe(
-      map(movies => {
-        let sliceMovies = slicePage(movies, this.pageOption);
-        if (sliceMovies.length === 0) {
-          const newPageIndex = this.pageOption.pageIndex !== 0 ? this.pageOption.pageIndex - 1 : 0;
-          this.pageOption = { ...this.pageOption, ...{ pageIndex: newPageIndex } };
-          sliceMovies = slicePage(movies, this.pageOption);
-        }
-        return sliceMovies;
-      })
-    );
   }
 
   openSnackBar(message: string): void {
