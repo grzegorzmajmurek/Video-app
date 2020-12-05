@@ -12,35 +12,35 @@
         <div>
           <span>Przełącz</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_agenda" label="Lista"
-                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
+            (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_module" label="Kafelki"
-                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
+            (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
         </div>
         <div>
           <span>Sortuj</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_top" label="Ostatnio dodane"
-                      (buttonClick)="sortByDate(SORT.ASC)"></app-button>
+            (buttonClick)="sortByDate(SORT.ASC)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_bottom" label="Najstarsze"
-                      (buttonClick)="sortByDate(SORT.DSC)"></app-button>
+            (buttonClick)="sortByDate(SORT.DSC)"></app-button>
         </div>
       </mat-toolbar>
 
       <div class="w-100 flex" [ngClass]="getListClass">
-        <div *ngFor="let movie of sortedMoviesList">
+        <div *ngFor="let movie of displayMovieByPageOption | async">
           <app-list-item [type]="type" [movie]="movie"></app-list-item>
         </div>
       </div>
       <div class="mb-70">
-        <app-paginator [length]="allMovies.length" [pageSize]="pageOption.pageSize" [pageIndex]="pageOption.pageIndex"
-                       (page)="pageHandler($event)">
+        <app-paginator [length]="(movies$ | async).length" [pageSize]="pageOption.pageSize"
+          [pageIndex]="pageOption.pageIndex" (page)="pageHandler($event)">
         </app-paginator>
       </div>
     </div>
     <!-- ulubione -->
     <div class="w-20 flex column">
       <mat-toolbar><span>Ulubione:</span></mat-toolbar>
-      <div class="mb-70">
-        <div *ngFor="let movie of allMovies">
+      <div class="mb-70 scroll-overflow">
+        <div *ngFor="let movie of movies$ | async">
           <div *ngIf="movie.favorite">
             <app-list-item [type]="DISPLAY_TYPE.LIST_FAVORITE" [movie]="movie" class="w-100"></app-list-item>
           </div>

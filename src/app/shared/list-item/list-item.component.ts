@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {BUTTON_TYPE} from '../button/button.component';
-import {DialogComponent} from '../dialog/dialog.component';
+import {BUTTON_TYPE} from '@shared/button/button.component';
+import {DialogComponent} from '@shared/dialog/dialog.component';
 import {Movie, DISPLAY_TYPE} from '@model/movies.model';
 import {MoviesService} from '@services/movies.service';
 
@@ -23,8 +23,8 @@ export class ListItemComponent {
     this.moviesService.deleteMovie(id);
   }
 
-  setFavourite(id: number): void {
-    this.moviesService.setFavorite(id);
+  setFavorite(id: number): void {
+    this.moviesService.setFavorite(id, true);
   }
 
   openDialog(url: string): void {
@@ -32,6 +32,6 @@ export class ListItemComponent {
   }
 
   deleteFavorite(id: number): void {
-    this.moviesService.deleteFavorite(id);
+    this.moviesService.setFavorite(id, false);
   }
 }

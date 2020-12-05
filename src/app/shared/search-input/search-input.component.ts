@@ -12,5 +12,4 @@ export class SearchInputComponent {
   onChangeValue(value: string): void {
     this.valueChanged.emit(value);
   }
-
 }

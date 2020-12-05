@@ -35,7 +35,7 @@
   <app-button label="Usuń" [type]="BUTTON_TYPE.MINI_FAB" icon="remove" color="warn"
               (buttonClick)="deleteMovie(movie.id)"></app-button>
   <app-button label="Dodaj do ulubionych" [type]="BUTTON_TYPE.MINI_FAB" icon="favorite_border" color="accent"
-              (buttonClick)="setFavourite(movie.id)"></app-button>
+              (buttonClick)="setFavorite(movie.id)"></app-button>
 </ng-template>
 
 <ng-template #actionButtonFavorite let-movie="movie">
