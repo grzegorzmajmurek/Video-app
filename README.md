@@ -9,8 +9,8 @@
 
 ## Użyte frameworki i bibioteki
 
-* Angular 11.0.0            https://angular.io/
-* Angular Material 10.2.7   https://material.angular.io/
+* Angular 11.0.1            https://angular.io/
+* Angular Material 11.0.1   https://material.angular.io/
 
 ## Użyte zewnętrzne API
 * Youtube API               https://developers.google.com/youtube/v3
@@ -31,3 +31,9 @@ export const environment = {
     vimeo: `${YOUTUBE_SECRET_KEY}`
   }
 };
+```
+## HINT
+ 
+Jeżeli pojawi się bład w trakcie odtwarzania filmu związany :
+[Strict Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
+Należy wyłączyć AdBlock
