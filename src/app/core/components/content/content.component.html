@@ -6,7 +6,7 @@
   <div class="flex">
     <div class="flex column w-80">
       <mat-toolbar class="justify-around">
-        <app-check-box label="Tylko ulubione" [checked]="onlyFavoriteMovie" (isChecked)="selectFavoriteMovies($event)">
+        <app-check-box label="Tylko ulubione" [checked]="onlyFavoriteMovie" (change)="selectFavoriteMovies($event)">
         </app-check-box>
         <app-button label="Usuń wszystkie filmy" (buttonClick)="deleteAllMovies()"></app-button>
         <div>

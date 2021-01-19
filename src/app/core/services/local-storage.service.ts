@@ -8,11 +8,11 @@ import { Injectable } from '@angular/core';
 export class LocalStorageService {
 
   updateLocalStorage(movies: Movie[]): void {
-    localStorage.setItem('movies', JSON.stringify(movies));
+    localStorage.setItem('data', JSON.stringify(movies));
   }
 
-  setMoviesFromLocalStorage(): Movie[] {
-    const storage = JSON.parse(localStorage.getItem('movies'));
+  getDataFromLocalStorage(): Movie[] {
+    const storage = JSON.parse(localStorage.getItem('data'));
     return storage === null ? [] : storage;
   }
 }
