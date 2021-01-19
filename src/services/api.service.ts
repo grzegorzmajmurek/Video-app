@@ -23,7 +23,7 @@ export class ApiService {
             params = params.append(p, data[p]);
         });
         params = params.append('part', 'statistics');
-        return  this.httpClient.get('https://www.googleapis.com/youtube/v3/videos', { params }) as Observable<YoutubeApiResponse>;
+        return this.httpClient.get('https://www.googleapis.com/youtube/v3/videos', { params }) as Observable<YoutubeApiResponse>;
     }
 
     fetchVimeoApi(id: string): Observable<VimeoApiResponse> {

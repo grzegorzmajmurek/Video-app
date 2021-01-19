@@ -14,6 +14,10 @@ import { MoviesService } from '../services/movies.service';
 import { ListItemComponent } from '../shared-components/list-item/list-item.component';
 import { CheckBoxComponent } from '../shared-components/check-box/check-box.component';
 import { PaginatorComponent } from '../shared-components/paginator/paginator.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { EffectsModule } from '@ngrx/effects';
+import {AppEffects} from '../store/app.effects';
 
 
 @NgModule({
@@ -34,7 +38,11 @@ import { PaginatorComponent } from '../shared-components/paginator/paginator.com
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AppMaterialModule
+    AppMaterialModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers
+    }),
+    EffectsModule.forRoot([AppEffects])
   ],
   providers: [
     ApiService,
