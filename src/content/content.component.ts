@@ -8,6 +8,10 @@ import { extractIdAndWebsiteType } from '@utile/utile';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BUTTON_TYPE } from '@shared-components/button/button.component';
+import {Store} from '@ngrx/store';
+import {DownloadDataFromLocalStorage, FetchMovieFromVimeo, FetchMovieFromYoutube} from '../store/movie/movie.actions';
+import {AppState} from '../store/store.state';
+import {getMovies} from '../store/app.selectors';
 
 @Component({
   selector: 'app-content',
@@ -31,12 +35,14 @@ export class ContentComponent implements OnInit {
 
   constructor(public apiService: ApiService,
               public moviesService: MoviesService,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              private readonly store: Store<AppState>) {
               }
 
 
   ngOnInit(): void {
     this.moviesService.setMoviesFromLocalStorage();
+    this.store.dispatch(new DownloadDataFromLocalStorage());
     this.managedMovies = this.allMovies;
   }
 
@@ -52,6 +58,8 @@ export class ContentComponent implements OnInit {
 
   get allMovies(): Movie[] {
     const all = this.moviesService.allMovies;
+    this.store.select(getMovies).subscribe(movies => console.log(movies));
+
     const onlyFavorite = all.filter((movie: Movie) => movie.favorite === true);
     return this.onlyFavoriteMovie ? onlyFavorite : all;
   }
@@ -62,6 +70,7 @@ export class ContentComponent implements OnInit {
 
   handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
     if (type === VIDEO_WEBSITE.VIMEO) {
+      this.store.dispatch(new FetchMovieFromVimeo(idVideo));
       this.apiService.fetchVimeoApi(idVideo)
         .subscribe((res: VimeoApiResponse) => {
           const movie: Movie = {
@@ -82,6 +91,7 @@ export class ContentComponent implements OnInit {
         );
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
+      this.store.dispatch(new FetchMovieFromYoutube(idVideo));
       this.apiService.fetchYoutubeApi(idVideo)
         .subscribe((res: YoutubeApiResponse) => {
           if (res.items.length === 0) {

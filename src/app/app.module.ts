@@ -17,7 +17,10 @@ import { PaginatorComponent } from '../shared-components/paginator/paginator.com
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
-import {AppEffects} from '../store/app.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import {MovieEffects} from '../store/movie/movie.effects';
+import {appStateReducers} from '../store/store.state';
 
 
 @NgModule({
@@ -39,10 +42,10 @@ import {AppEffects} from '../store/app.effects';
     HttpClientModule,
     BrowserAnimationsModule,
     AppMaterialModule,
-    StoreModule.forRoot(reducers, {
-      metaReducers
-    }),
-    EffectsModule.forRoot([AppEffects])
+    StoreModule.forRoot( {}),
+    StoreModule.forFeature('app', appStateReducers),
+    EffectsModule.forRoot([MovieEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [
     ApiService,

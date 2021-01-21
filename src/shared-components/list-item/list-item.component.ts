@@ -4,6 +4,9 @@ import { Movie, DISPLAY_TYPE } from '@model/movies.model';
 import { MoviesService } from '@services/movies.service';
 import { DialogComponent } from '@shared-components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store/store.state';
+import {AddToFavourite, DeleteFromFavourite, RemoveMovie} from '../../store/movie/movie.actions';
 
 @Component({
   selector: 'app-list-item',
@@ -15,16 +18,18 @@ export class ListItemComponent implements OnInit {
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
   BUTTON_TYPE = BUTTON_TYPE;
-  constructor(public moviesService: MoviesService, public dialog: MatDialog) { }
+  constructor(public moviesService: MoviesService, public dialog: MatDialog, private readonly store: Store<AppState>) { }
 
   ngOnInit(): void {
  }
 
   deleteMovie(id: number): void {
+    this.store.dispatch(new RemoveMovie(id));
     this.moviesService.deleteMovie(id);
   }
 
   setFavourite(id: number): void {
+    this.store.dispatch(new AddToFavourite(id));
     this.moviesService.setFavorite(id);
   }
 
@@ -33,6 +38,7 @@ export class ListItemComponent implements OnInit {
   }
 
   deleteFavorite(id: number): void {
+    this.store.dispatch(new DeleteFromFavourite(id));
     this.moviesService.deleteFavorite(id);
   }
 }
