@@ -11,6 +11,13 @@ export const ADD_MOVIE_TO_FAVOURITE = '[MOVIE] ADD_TO_FAVOURITE';
 export const DELETE_MOVIE_FROM_FAVOURITE = '[MOVIE] DELETE_FROM_FAVOURITE';
 export const DOWNLOAD_DATA_FROM_LOCAL_STORAGE = '[MOVIE] DOWNLOAD_DATA_FROM_LOCAL_STORAGE';
 export const UPDATE_DATA_IN_LOCAL_STORAGE = '[MOVIE] UPDATE_DATA_IN_LOCAL_STORAGE';
+export const DELETE_ALL_MOVIES = '[MOVIE] DELETE_ALL_MOVIES';
+
+export class DeleteAllMovies {
+  readonly type = DELETE_ALL_MOVIES;
+  constructor() {
+  }
+}
 
 export class DownloadDataFromLocalStorage implements Action {
   readonly type = DOWNLOAD_DATA_FROM_LOCAL_STORAGE;
@@ -84,4 +91,5 @@ export type All =
   AddToFavourite |
   DeleteFromFavourite |
   DownloadDataFromLocalStorage |
-  UpdateDataInLocalStorage;
+  UpdateDataInLocalStorage |
+  DeleteAllMovies;

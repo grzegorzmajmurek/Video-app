@@ -70,6 +70,11 @@ export function MovieRedcuer(state = defaultState, action: Action): any {
       return {
         state
       };
+    case MovieActions.DELETE_ALL_MOVIES:
+      return {
+        ...state,
+        movies: []
+      };
     default:
       return state;
   }

@@ -1,17 +1,20 @@
-import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
-import { Component, OnInit } from '@angular/core';
-import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
-import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
-import { ApiService } from '@services/api.service';
-import { MoviesService } from '@services/movies.service';
-import { extractIdAndWebsiteType } from '@utile/utile';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
+import {Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from '@model/movies.model';
+import {Component, OnInit} from '@angular/core';
+import {VimeoApiResponse, YoutubeApiResponse} from '@model/api-response.model';
+import {DISPLAY_TYPE, VIDEO_WEBSITE, SORT} from '@model/movies.model';
+import {ApiService} from '@services/api.service';
+import {MoviesService} from '@services/movies.service';
+import {extractIdAndWebsiteType} from '@utile/utile';
+import {PageEvent} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {BUTTON_TYPE} from '@shared-components/button/button.component';
 import {Store} from '@ngrx/store';
-import {DownloadDataFromLocalStorage, FetchMovieFromVimeo, FetchMovieFromYoutube} from '../store/movie/movie.actions';
+import {DeleteAllMovies, DownloadDataFromLocalStorage, FetchMovieFromVimeo, FetchMovieFromYoutube} from '../store/movie/movie.actions';
 import {AppState} from '../store/store.state';
 import {getMovies} from '../store/app.selectors';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {DisplayType, SortByDate} from '../store/ui/ui.actions';
 
 @Component({
   selector: 'app-content',
@@ -37,12 +40,19 @@ export class ContentComponent implements OnInit {
               public moviesService: MoviesService,
               public snackBar: MatSnackBar,
               private readonly store: Store<AppState>) {
-              }
+  }
 
 
   ngOnInit(): void {
     this.moviesService.setMoviesFromLocalStorage();
     this.store.dispatch(new DownloadDataFromLocalStorage());
+    // this.store.select(getMovies).subscribe(v => console.log('onInit', v));
+    // this.store.select(getMovies).pipe(
+    //   map(movies => {
+    //     const onlyFavorite = movies.filter((movie: Movie) => movie.favorite === true);
+    //     return this.onlyFavoriteMovie ? onlyFavorite : movies;
+    //   })
+    // );
     this.managedMovies = this.allMovies;
   }
 
@@ -127,11 +137,13 @@ export class ContentComponent implements OnInit {
   }
 
   deleteAllMovies(): void {
+    this.store.dispatch(new DeleteAllMovies());
     this.moviesService.deleteAllMovies();
     this.managedMovies = this.allMovies;
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
+    this.store.dispatch(new DisplayType(type));
     this.type = type;
   }
 
@@ -141,6 +153,7 @@ export class ContentComponent implements OnInit {
   }
 
   sortByDate(type: SORT): void {
+    this.store.dispatch(new SortByDate(type));
     this.sortType = type;
     this.managedMovies = this.managedMovies.sort((a, b) => this.compare(a, b, type));
   }
