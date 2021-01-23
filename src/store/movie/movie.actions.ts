@@ -29,7 +29,7 @@ export class DownloadDataFromLocalStorage implements Action {
 export class UpdateDataInLocalStorage implements Action {
   readonly type = UPDATE_DATA_IN_LOCAL_STORAGE;
 
-  constructor(public data: Movie[]) {
+  constructor() {
   }
 }
 

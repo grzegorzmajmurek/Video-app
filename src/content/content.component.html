@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="mb-70">
-        <app-paginator [length]="allMovies.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
+        <app-paginator [length]="(movies | async).length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
           (page)="pageHandler($event)">
         </app-paginator>
       </div>
@@ -40,7 +40,7 @@
     <div class="w-20 flex column">
       <mat-toolbar><span>Ulubione:</span></mat-toolbar>
       <div class="mb-70">
-        <div *ngFor="let movie of allMovies">
+        <div *ngFor="let movie of movies | async">
           <div *ngIf="movie.favorite">
             <app-list-item [type]="DISPLAY_TYPE.LIST_FAVORITE" [movie]="movie" class="w-100"></app-list-item>
           </div>

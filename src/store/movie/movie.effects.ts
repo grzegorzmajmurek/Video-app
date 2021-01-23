@@ -6,7 +6,7 @@ import {
   FETCH_MOVIE_FROM_VIMEO,
   FETCH_MOVIE_FROM_YOUTUBE,
   FetchMovieFromVimeo,
-  FetchMovieFromYoutube, VimeoMovieLoadedSucces,
+  FetchMovieFromYoutube, UpdateDataInLocalStorage, VimeoMovieLoadedSucces,
   YoutubeMovieLoadedSucces
 } from './movie.actions';
 import {of} from 'rxjs';

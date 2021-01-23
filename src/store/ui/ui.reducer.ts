@@ -5,7 +5,8 @@ export type Action = UiActions.All;
 const defaultState = {
   alert: null,
   sort: SORT.ASC,
-  display: DISPLAY_TYPE.LIST
+  display: DISPLAY_TYPE.LIST,
+  onlyFavourite: false
 };
 
 export function UiRedcuer(state = defaultState, action: Action) {
@@ -24,6 +25,11 @@ export function UiRedcuer(state = defaultState, action: Action) {
       return {
         ...state,
         display: action.display
+      };
+    case UiActions.ONLY_FAVOURITE:
+      return {
+        ...state,
+        onlyFavourite: action.onlyFavourite
       };
     default:
       return state;
