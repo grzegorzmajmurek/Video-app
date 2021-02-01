@@ -1,6 +1,6 @@
 import {Action} from '@ngrx/store';
 import {VimeoApiResponse, YoutubeApiResponse} from '@model/api-response.model';
-import {Movie} from '@model/movies.model';
+import {SORT} from '@model/movies.model';
 
 export const FETCH_MOVIE_FROM_YOUTUBE = '[MOVIE] FETCH_MOVIE_FROM_YOUTUBE';
 export const FETCH_MOVIE_FROM_VIMEO = '[MOVIE] FETCH_MOVIE_FROM_VIMEO';
@@ -12,9 +12,11 @@ export const DELETE_MOVIE_FROM_FAVOURITE = '[MOVIE] DELETE_FROM_FAVOURITE';
 export const DOWNLOAD_DATA_FROM_LOCAL_STORAGE = '[MOVIE] DOWNLOAD_DATA_FROM_LOCAL_STORAGE';
 export const UPDATE_DATA_IN_LOCAL_STORAGE = '[MOVIE] UPDATE_DATA_IN_LOCAL_STORAGE';
 export const DELETE_ALL_MOVIES = '[MOVIE] DELETE_ALL_MOVIES';
+export const SORT_BY_DATE = '[MOVIE] SORT_BY_DATE';
 
 export class DeleteAllMovies {
   readonly type = DELETE_ALL_MOVIES;
+
   constructor() {
   }
 }
@@ -68,7 +70,7 @@ export class FetchMovieFromVimeo implements Action {
   }
 }
 
-export class YoutubeMovieLoadedSucces implements Action {
+export class YoutubeMovieLoadedSuccess implements Action {
   readonly type = YOUTUBE_MOVIE_LOADED_SUCCESS;
 
   constructor(public res: YoutubeApiResponse) {
@@ -82,14 +84,22 @@ export class VimeoMovieLoadedSucces implements Action {
   }
 }
 
+export class SortByDate implements Action {
+  readonly type = SORT_BY_DATE;
+
+  constructor(public sort: SORT) {
+  }
+}
+
 export type All =
   FetchMovieFromYoutube |
   FetchMovieFromVimeo |
-  YoutubeMovieLoadedSucces |
+  YoutubeMovieLoadedSuccess |
   VimeoMovieLoadedSucces |
   RemoveMovie |
   AddToFavourite |
   DeleteFromFavourite |
   DownloadDataFromLocalStorage |
   UpdateDataInLocalStorage |
-  DeleteAllMovies;
+  DeleteAllMovies |
+  SortByDate ;

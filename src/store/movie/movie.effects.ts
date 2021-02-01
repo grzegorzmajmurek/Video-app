@@ -1,15 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, map, mergeMap} from 'rxjs/operators';
+import {map, mergeMap} from 'rxjs/operators';
 import {ApiService} from '@services/api.service';
 import {
   FETCH_MOVIE_FROM_VIMEO,
   FETCH_MOVIE_FROM_YOUTUBE,
   FetchMovieFromVimeo,
-  FetchMovieFromYoutube, UpdateDataInLocalStorage, VimeoMovieLoadedSucces,
-  YoutubeMovieLoadedSucces
+  FetchMovieFromYoutube, VimeoMovieLoadedSucces,
+  YoutubeMovieLoadedSuccess
 } from './movie.actions';
-import {of} from 'rxjs';
 import {AddAlert} from '../ui/ui.actions';
 
 @Injectable()
@@ -26,13 +25,10 @@ export class MovieEffects {
     mergeMap(action => this.apiService.fetchYoutubeApi(action.id)
       .pipe(
         map(res => {
-          if (res.items.length === 0) {
-            return;
+          if (!action || res.items.length === 0) {
+            return new AddAlert('Podałeś niepoprawny link do YouTube');
           }
-          return new YoutubeMovieLoadedSucces(res);
-        }),
-        catchError(err => {
-          return of(new AddAlert('Podałeś niepoprawny link do YouTube'));
+          return new YoutubeMovieLoadedSuccess(res);
         })
       ))
   ));
@@ -41,9 +37,12 @@ export class MovieEffects {
     ofType<FetchMovieFromVimeo>(FETCH_MOVIE_FROM_VIMEO),
     mergeMap(action => this.apiService.fetchVimeoApi(action.id)
       .pipe(
-        map(res => new VimeoMovieLoadedSucces(res, action.id)),
-        catchError(err => {
-          return of(new AddAlert('Podałeś niepoprawny link do Vimeo'));
+        map(res => {
+          if (action) {
+            return new VimeoMovieLoadedSucces(res, action.id);
+          } else {
+            return new AddAlert('Podałeś niepoprawny link do Vimeo');
+          }
         })
       ))
   ));

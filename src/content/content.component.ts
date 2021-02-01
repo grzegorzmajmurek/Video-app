@@ -1,23 +1,21 @@
-import {Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from '@model/movies.model';
-import {Component, OnInit} from '@angular/core';
-import {DISPLAY_TYPE, VIDEO_WEBSITE, SORT} from '@model/movies.model';
-import {extractIdAndWebsiteType} from '@utile/utile';
-import {PageEvent} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BUTTON_TYPE} from '@shared-components/button/button.component';
-import {Store} from '@ngrx/store';
+import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
+import { Component, OnInit } from '@angular/core';
+import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
+import { extractIdAndWebsiteType } from '@utile/utile';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
+import { Store } from '@ngrx/store';
 import {
   DeleteAllMovies,
   DownloadDataFromLocalStorage,
   FetchMovieFromVimeo,
-  FetchMovieFromYoutube,
+  FetchMovieFromYoutube, SortByDate,
   UpdateDataInLocalStorage,
 } from '../store/movie/movie.actions';
-import {AppState} from '../store/store.state';
-import {getManagedMovie, getAllMovies} from '../store/app.selectors';
-import {DisplayType, OnlyFavourite, SortByDate} from '../store/ui/ui.actions';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { AppState } from '../store/store.state';
+import { getManagedMovie, getAllMovies } from '../store/app.selectors';
+import { OnlyFavourite } from '../store/ui/ui.actions';
 
 @Component({
   selector: 'app-content',
@@ -35,7 +33,7 @@ export class ContentComponent implements OnInit {
   page: PageEvent = {
     pageIndex: DEFAULT_PAGE_INDEX,
     pageSize: DEFAULT_PAGE_SIZE,
-    length: DEFAULT_PAGE_SIZE,
+    length: this.allMovies.length,
   };
   managedMovies: Movie[] = [];
 
@@ -60,12 +58,6 @@ export class ContentComponent implements OnInit {
       sliceMovies = this.slicePage(this.managedMovies, this.page);
     }
     return sliceMovies;
-  }
-
-  get movies(): Observable<Movie[]> {
-    return this.store.select(getAllMovies).pipe(
-      map(res => res),
-    );
   }
 
   get getListClass(): string {
@@ -98,7 +90,6 @@ export class ContentComponent implements OnInit {
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
-    this.store.dispatch(new DisplayType(type));
     this.type = type;
   }
 
@@ -108,7 +99,6 @@ export class ContentComponent implements OnInit {
 
   sortByDate(type: SORT): void {
     this.store.dispatch(new SortByDate(type));
-    this.managedMovies = this.managedMovies.sort((a, b) => this.compare(a, b, type));
   }
 
   pageHandler(page: PageEvent): void {
@@ -117,18 +107,6 @@ export class ContentComponent implements OnInit {
 
   slicePage(allMovies: Movie[], page: PageEvent): Movie[] {
     return allMovies.slice((page.pageIndex * page.pageSize), (page.pageIndex * page.pageSize) + page.pageSize);
-  }
-
-  compare(a: Movie, b: Movie, type: SORT): number {
-    const dateA = new Date(a.publishedAt);
-    const dateB = new Date(b.publishedAt);
-    let comparison = 0;
-    if (type === SORT.ASC) {
-      comparison = dateA < dateB ? 1 : -1;
-    } else {
-      comparison = dateA > dateB ? 1 : -1;
-    }
-    return comparison;
   }
 
   openSnackBar(message: string): void {

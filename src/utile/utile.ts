@@ -44,3 +44,15 @@ export const extractIdAndWebsiteType = (link: string): IdAndWebsiteType => {
     videoWebsite: extractType(link)
   };
 };
+
+export const compare = (a: Movie, b: Movie, type: SORT): number => {
+  const dateA = new Date(a.publishedAt);
+  const dateB = new Date(b.publishedAt);
+  let comparison = 0;
+  if (type === SORT.ASC) {
+    comparison = dateA < dateB ? 1 : -1;
+  } else {
+    comparison = dateA > dateB ? 1 : -1;
+  }
+  return comparison;
+};
