@@ -1,105 +1,59 @@
-import {Action} from '@ngrx/store';
+import {createAction, props} from '@ngrx/store';
 import {VimeoApiResponse, YoutubeApiResponse} from '@model/api-response.model';
 import {SORT} from '@model/movies.model';
 
-export const FETCH_MOVIE_FROM_YOUTUBE = '[MOVIE] FETCH_MOVIE_FROM_YOUTUBE';
-export const FETCH_MOVIE_FROM_VIMEO = '[MOVIE] FETCH_MOVIE_FROM_VIMEO';
-export const YOUTUBE_MOVIE_LOADED_SUCCESS = '[MOVIE] YOUTUBE_MOVIE_LOADED_SUCCESS';
-export const VIMEO_MOVIE_LOADED_SUCCESS = '[MOVIE] VIMEO_MOVIE_LOADED_SUCCESS';
-export const REMOVE_MOVIE = '[MOVIE] REMOVE_MOVIE';
-export const ADD_MOVIE_TO_FAVOURITE = '[MOVIE] ADD_TO_FAVOURITE';
-export const DELETE_MOVIE_FROM_FAVOURITE = '[MOVIE] DELETE_FROM_FAVOURITE';
-export const DOWNLOAD_DATA_FROM_LOCAL_STORAGE = '[MOVIE] DOWNLOAD_DATA_FROM_LOCAL_STORAGE';
-export const UPDATE_DATA_IN_LOCAL_STORAGE = '[MOVIE] UPDATE_DATA_IN_LOCAL_STORAGE';
-export const DELETE_ALL_MOVIES = '[MOVIE] DELETE_ALL_MOVIES';
-export const SORT_BY_DATE = '[MOVIE] SORT_BY_DATE';
+export const deleteAllMovies = createAction(
+  '[MOVIE] DELETE_ALL_MOVIES'
+);
 
-export class DeleteAllMovies {
-  readonly type = DELETE_ALL_MOVIES;
 
-  constructor() {
-  }
-}
+export const downloadDataFromLocalStorage = createAction(
+  '[MOVIE] DOWNLOAD_DATA_FROM_LOCAL_STORAGE'
+);
 
-export class DownloadDataFromLocalStorage implements Action {
-  readonly type = DOWNLOAD_DATA_FROM_LOCAL_STORAGE;
 
-  constructor() {
-  }
-}
+export const updateDataInLocalStorage = createAction(
+  '[MOVIE] UPDATE_DATA_IN_LOCAL_STORAGE'
+);
 
-export class UpdateDataInLocalStorage implements Action {
-  readonly type = UPDATE_DATA_IN_LOCAL_STORAGE;
 
-  constructor() {
-  }
-}
+export const addToFavourite = createAction(
+  '[MOVIE] ADD_TO_FAVOURITE',
+  props<{ id: number }>()
+);
 
-export class AddToFavourite implements Action {
-  readonly type = ADD_MOVIE_TO_FAVOURITE;
 
-  constructor(public id: number) {
-  }
-}
+export const deleteFromFavourite = createAction(
+  '[MOVIE] DELETE_FROM_FAVOURITE',
+  props<{ id: number }>()
+);
 
-export class DeleteFromFavourite implements Action {
-  readonly type = DELETE_MOVIE_FROM_FAVOURITE;
+export const removeMovie = createAction(
+  '[MOVIE] REMOVE_MOVIE',
+  props<{ id: number }>()
+);
 
-  constructor(public id: number) {
-  }
-}
+export const fetchMovieFromYoutube = createAction(
+  '[MOVIE] FETCH_MOVIE_FROM_YOUTUBE',
+  props<{ id: string }>()
+);
 
-export class RemoveMovie implements Action {
-  readonly type = REMOVE_MOVIE;
+export const fetchMovieFromVimeo = createAction(
+  '[MOVIE] FETCH_MOVIE_FROM_VIMEO',
+  props<{ id: string }>()
+);
 
-  constructor(public id: number) {
-  }
-}
+export const youtubeMovieLoadedSuccess = createAction(
+  '[MOVIE] YOUTUBE_MOVIE_LOADED_SUCCESS',
+  props<{ res: YoutubeApiResponse }>()
+);
 
-export class FetchMovieFromYoutube implements Action {
-  readonly type = FETCH_MOVIE_FROM_YOUTUBE;
+export const vimeoMovieLoadedSucces = createAction(
+  '[MOVIE] VIMEO_MOVIE_LOADED_SUCCESS',
+  props<{ res: VimeoApiResponse, id: string }>()
+);
 
-  constructor(public id: string) {
-  }
-}
-
-export class FetchMovieFromVimeo implements Action {
-  readonly type = FETCH_MOVIE_FROM_VIMEO;
-
-  constructor(public id: string) {
-  }
-}
-
-export class YoutubeMovieLoadedSuccess implements Action {
-  readonly type = YOUTUBE_MOVIE_LOADED_SUCCESS;
-
-  constructor(public res: YoutubeApiResponse) {
-  }
-}
-
-export class VimeoMovieLoadedSucces implements Action {
-  readonly type = VIMEO_MOVIE_LOADED_SUCCESS;
-
-  constructor(public res: VimeoApiResponse, public id: string) {
-  }
-}
-
-export class SortByDate implements Action {
-  readonly type = SORT_BY_DATE;
-
-  constructor(public sort: SORT) {
-  }
-}
-
-export type All =
-  FetchMovieFromYoutube |
-  FetchMovieFromVimeo |
-  YoutubeMovieLoadedSuccess |
-  VimeoMovieLoadedSucces |
-  RemoveMovie |
-  AddToFavourite |
-  DeleteFromFavourite |
-  DownloadDataFromLocalStorage |
-  UpdateDataInLocalStorage |
-  DeleteAllMovies |
-  SortByDate ;
+export const sortByDate = createAction(
+  '[MOVIE] SORT_BY_DATE',
+  props<{ sort: SORT }>()
+);

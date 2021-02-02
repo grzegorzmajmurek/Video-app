@@ -1,24 +1,28 @@
 import * as UiActions from './ui.actions';
+import {Action, createReducer, on} from '@ngrx/store';
+import {UiState} from './ui.state';
 
-export type Action = UiActions.All;
-const defaultState = {
+const initialState = {
   alert: null,
   onlyFavourite: false
 };
 
-export function UiRedcuer(state = defaultState, action: Action) {
-  switch (action.type) {
-    case UiActions.ADD_ALERT:
-      return {
-        ...state,
-        alert: action.text
-      };
-    case UiActions.ONLY_FAVOURITE:
-      return {
-        ...state,
-        onlyFavourite: action.onlyFavourite
-      };
-    default:
-      return state;
-  }
+const uiReducer = createReducer(
+  initialState,
+  on(UiActions.addAlert, (state, {text}) =>{
+    return {
+      ...state,
+      alert: text
+    };
+  }),
+  on(UiActions.onlyFavouriteMovies, (state, {isOnlyFavourite}) =>{
+    return {
+      ...state,
+      onlyFavourite: isOnlyFavourite
+    };
+  })
+);
+
+export function reducer(state: UiState | undefined, action: Action) {
+  return uiReducer(state, action);
 }

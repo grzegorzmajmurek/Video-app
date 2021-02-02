@@ -3,9 +3,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Movie, DISPLAY_TYPE } from '@model/movies.model';
 import { DialogComponent } from '@shared-components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store/store.state';
-import {AddToFavourite, DeleteFromFavourite, RemoveMovie, UpdateDataInLocalStorage} from '../../store/movie/movie.actions';
+import {Store} from '@ngrx/store';;
+import {addToFavourite, deleteFromFavourite, removeMovie, updateDataInLocalStorage} from '../../store/movie/movie.actions';
+import {AppState} from '../../store/app.selectors';
 
 @Component({
   selector: 'app-list-item',
@@ -23,13 +23,13 @@ export class ListItemComponent implements OnInit {
  }
 
   deleteMovie(id: number): void {
-    this.store.dispatch(new RemoveMovie(id));
-    this.store.dispatch(new UpdateDataInLocalStorage());
+    this.store.dispatch(removeMovie({id}));
+    this.store.dispatch(updateDataInLocalStorage());
   }
 
   setFavourite(id: number): void {
-    this.store.dispatch(new AddToFavourite(id));
-    this.store.dispatch(new UpdateDataInLocalStorage());
+    this.store.dispatch(addToFavourite({id}));
+    this.store.dispatch(updateDataInLocalStorage());
   }
 
   openDialog(url: string): void {
@@ -37,7 +37,7 @@ export class ListItemComponent implements OnInit {
   }
 
   deleteFavorite(id: number): void {
-    this.store.dispatch(new DeleteFromFavourite(id));
-    this.store.dispatch(new UpdateDataInLocalStorage());
+    this.store.dispatch(deleteFromFavourite({id}));
+    this.store.dispatch(updateDataInLocalStorage());
   }
 }

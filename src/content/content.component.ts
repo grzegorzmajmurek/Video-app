@@ -1,22 +1,23 @@
-import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
-import { Component, OnInit } from '@angular/core';
-import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
-import { extractIdAndWebsiteType } from '@utile/utile';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
-import { Store } from '@ngrx/store';
+import {Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from '@model/movies.model';
+import {Component, OnInit} from '@angular/core';
+import {DISPLAY_TYPE, VIDEO_WEBSITE, SORT} from '@model/movies.model';
+import {extractIdAndWebsiteType} from '@utile/utile';
+import {PageEvent} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {BUTTON_TYPE} from '@shared-components/button/button.component';
+import {Store} from '@ngrx/store';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {
-  DeleteAllMovies,
-  DownloadDataFromLocalStorage,
-  FetchMovieFromVimeo,
-  FetchMovieFromYoutube, SortByDate,
-  UpdateDataInLocalStorage,
+  deleteAllMovies,
+  downloadDataFromLocalStorage,
+  fetchMovieFromVimeo,
+  fetchMovieFromYoutube, sortByDate,
+  updateDataInLocalStorage,
 } from '../store/movie/movie.actions';
-import { AppState } from '../store/store.state';
-import { getManagedMovie, getAllMovies } from '../store/app.selectors';
-import { OnlyFavourite } from '../store/ui/ui.actions';
+import {getManagedMovie, getAllMovies, AppState} from '../store/app.selectors';
+import {onlyFavouriteMovies} from '../store/ui/ui.actions';
 
+@UntilDestroy()
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
@@ -42,12 +43,13 @@ export class ContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new DownloadDataFromLocalStorage());
-    this.store.select(getAllMovies).subscribe(allMovies => {
-      console.log(allMovies);
-      return this.allMovies = allMovies;
-    });
-    this.store.select(getManagedMovie).subscribe(movies => this.managedMovies = movies);
+    this.store.dispatch(downloadDataFromLocalStorage());
+    this.store.select(getAllMovies)
+      .pipe(untilDestroyed(this))
+      .subscribe(allMovies => this.allMovies = allMovies);
+    this.store.select(getManagedMovie)
+      .pipe(untilDestroyed(this))
+      .subscribe(movies => this.managedMovies = movies);
   }
 
   get sortedMoviesList(): Movie[] {
@@ -64,12 +66,12 @@ export class ContentComponent implements OnInit {
     return this.type === DISPLAY_TYPE.LIST ? 'column' : 'wrap';
   }
 
-  handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
+  handleApiResponse(type: VIDEO_WEBSITE, id: string): void {
     if (type === VIDEO_WEBSITE.VIMEO) {
-      this.store.dispatch(new FetchMovieFromVimeo(idVideo));
+      this.store.dispatch(fetchMovieFromVimeo({id}));
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.store.dispatch(new FetchMovieFromYoutube(idVideo));
+      this.store.dispatch(fetchMovieFromYoutube({id}));
     }
   }
 
@@ -85,20 +87,20 @@ export class ContentComponent implements OnInit {
   }
 
   deleteAllMovies(): void {
-    this.store.dispatch(new DeleteAllMovies());
-    this.store.dispatch(new UpdateDataInLocalStorage());
+    this.store.dispatch(deleteAllMovies());
+    this.store.dispatch(updateDataInLocalStorage());
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
     this.type = type;
   }
 
-  selectFavoriteMovies(onlyFavoriteMovie: boolean): void {
-    this.store.dispatch(new OnlyFavourite(onlyFavoriteMovie));
+  selectFavoriteMovies(onlyFavourite: boolean): void {
+    this.store.dispatch(onlyFavouriteMovies({isOnlyFavourite: onlyFavourite}));
   }
 
-  sortByDate(type: SORT): void {
-    this.store.dispatch(new SortByDate(type));
+  sortByDate(sort: SORT): void {
+    this.store.dispatch(sortByDate({sort}));
   }
 
   pageHandler(page: PageEvent): void {

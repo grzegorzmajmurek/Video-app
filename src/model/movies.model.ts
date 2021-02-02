@@ -1,8 +1,6 @@
-import { Thumbnails } from './api-response.model';
-
 export interface Movie {
     id?: number;
-    movieId: string;
+    movieId: string | number;
     imageUrl: string;
     title: string;
     viewCount: string;
