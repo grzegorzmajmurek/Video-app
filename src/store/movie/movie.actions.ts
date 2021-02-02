@@ -6,31 +6,19 @@ export const deleteAllMovies = createAction(
   '[MOVIE] DELETE_ALL_MOVIES'
 );
 
-
-export const downloadDataFromLocalStorage = createAction(
-  '[MOVIE] DOWNLOAD_DATA_FROM_LOCAL_STORAGE'
-);
-
-
-export const updateDataInLocalStorage = createAction(
-  '[MOVIE] UPDATE_DATA_IN_LOCAL_STORAGE'
-);
-
-
 export const addToFavourite = createAction(
   '[MOVIE] ADD_TO_FAVOURITE',
-  props<{ id: number }>()
+  props<{ id: string }>()
 );
-
 
 export const deleteFromFavourite = createAction(
   '[MOVIE] DELETE_FROM_FAVOURITE',
-  props<{ id: number }>()
+  props<{ id: string }>()
 );
 
 export const removeMovie = createAction(
   '[MOVIE] REMOVE_MOVIE',
-  props<{ id: number }>()
+  props<{ id: string }>()
 );
 
 export const fetchMovieFromYoutube = createAction(

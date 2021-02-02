@@ -9,10 +9,8 @@ import {Store} from '@ngrx/store';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {
   deleteAllMovies,
-  downloadDataFromLocalStorage,
   fetchMovieFromVimeo,
   fetchMovieFromYoutube, sortByDate,
-  updateDataInLocalStorage,
 } from '../store/movie/movie.actions';
 import {getManagedMovie, getAllMovies, AppState} from '../store/app.selectors';
 import {onlyFavouriteMovies} from '../store/ui/ui.actions';
@@ -43,7 +41,6 @@ export class ContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(downloadDataFromLocalStorage());
     this.store.select(getAllMovies)
       .pipe(untilDestroyed(this))
       .subscribe(allMovies => this.allMovies = allMovies);
@@ -88,7 +85,6 @@ export class ContentComponent implements OnInit {
 
   deleteAllMovies(): void {
     this.store.dispatch(deleteAllMovies());
-    this.store.dispatch(updateDataInLocalStorage());
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {

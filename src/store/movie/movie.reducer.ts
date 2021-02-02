@@ -23,7 +23,6 @@ const movieReducer = createReducer(
         favorite: false
       }, ...state.movies]
     };
-    localStorage.setItem('movies', JSON.stringify(newYData.movies));
     return newYData;
   }),
   on(MovieActions.vimeoMovieLoadedSucces, (state, {res, id}) => {
@@ -39,7 +38,6 @@ const movieReducer = createReducer(
         favorite: false
       }, ...state.movies]
     };
-    localStorage.setItem('movies', JSON.stringify(newVData.movies));
     return newVData;
   }),
 
@@ -63,21 +61,6 @@ const movieReducer = createReducer(
     };
   }),
 
-  on(MovieActions.downloadDataFromLocalStorage, (state) => {
-    const movies = JSON.parse(localStorage.getItem('movies'));
-    return {
-      ...state,
-      movies: movies !== null ? movies : state.movies
-    };
-  }),
-
-  on(MovieActions.updateDataInLocalStorage, (state) => {
-    localStorage.setItem('movies', JSON.stringify(state.movies));
-    return {
-      ...state
-    };
-  }),
-
   on(MovieActions.deleteAllMovies, (state) => {
     return {
       ...state,
@@ -96,3 +79,4 @@ const movieReducer = createReducer(
 export function reducer(state: MovieState | undefined, action: Action) {
   return movieReducer(state, action);
 }
+
