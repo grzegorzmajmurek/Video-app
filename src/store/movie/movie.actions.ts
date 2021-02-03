@@ -1,6 +1,5 @@
 import {createAction, props} from '@ngrx/store';
-import {VimeoApiResponse, YoutubeApiResponse} from '@model/api-response.model';
-import {SORT} from '@model/movies.model';
+import {Movie, SORT} from '@model/movies.model';
 
 export const deleteAllMovies = createAction(
   '[MOVIE] DELETE_ALL_MOVIES'
@@ -33,12 +32,12 @@ export const fetchMovieFromVimeo = createAction(
 
 export const youtubeMovieLoadedSuccess = createAction(
   '[MOVIE] YOUTUBE_MOVIE_LOADED_SUCCESS',
-  props<{ res: YoutubeApiResponse }>()
+  props<{ movie: Movie }>()
 );
 
-export const vimeoMovieLoadedSucces = createAction(
+export const vimeoMovieLoadedSuccess = createAction(
   '[MOVIE] VIMEO_MOVIE_LOADED_SUCCESS',
-  props<{ res: VimeoApiResponse, id: string }>()
+  props<{ movie: Movie }>()
 );
 
 export const sortByDate = createAction(
