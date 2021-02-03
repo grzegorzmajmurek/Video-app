@@ -9,5 +9,3 @@ export const addAlert = createAction(
   '[UI] ADD_ALERT',
   props<{ text: string }>()
 );
-
-

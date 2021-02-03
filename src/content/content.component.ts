@@ -5,15 +5,9 @@ import {extractIdAndWebsiteType} from '@utile/utile';
 import {PageEvent} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BUTTON_TYPE} from '@shared-components/button/button.component';
-import {Store} from '@ngrx/store';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {
-  deleteAllMovies,
-  fetchMovieFromVimeo,
-  fetchMovieFromYoutube, sortByDate,
-} from '../store/movie/movie.actions';
-import {getManagedMovie, getAllMovies, AppState} from '../store/app.selectors';
-import {onlyFavouriteMovies} from '../store/ui/ui.actions';
+import {MovieFacade} from '../store/movie/movie-facade.service';
+import {UiFacade} from '../store/ui/ui-facade.service';
 
 @UntilDestroy()
 @Component({
@@ -37,14 +31,15 @@ export class ContentComponent implements OnInit {
   managedMovies: Movie[] = [];
 
   constructor(public snackBar: MatSnackBar,
-              private readonly store: Store<AppState>) {
+              public movieFacade: MovieFacade,
+              public uiFacade: UiFacade) {
   }
 
   ngOnInit(): void {
-    this.store.select(getAllMovies)
+    this.movieFacade.allMovies$
       .pipe(untilDestroyed(this))
       .subscribe(allMovies => this.allMovies = allMovies);
-    this.store.select(getManagedMovie)
+    this.movieFacade.managedMovies$
       .pipe(untilDestroyed(this))
       .subscribe(movies => this.managedMovies = movies);
   }
@@ -65,10 +60,10 @@ export class ContentComponent implements OnInit {
 
   handleApiResponse(type: VIDEO_WEBSITE, id: string): void {
     if (type === VIDEO_WEBSITE.VIMEO) {
-      this.store.dispatch(fetchMovieFromVimeo({id}));
+      this.movieFacade.loadMovieFromVimeo(id);
     }
     if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.store.dispatch(fetchMovieFromYoutube({id}));
+      this.movieFacade.loadMovieFromYoutube(id);
     }
   }
 
@@ -84,7 +79,7 @@ export class ContentComponent implements OnInit {
   }
 
   deleteAllMovies(): void {
-    this.store.dispatch(deleteAllMovies());
+    this.movieFacade.deleteAllFilms();
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
@@ -92,11 +87,11 @@ export class ContentComponent implements OnInit {
   }
 
   selectFavoriteMovies(onlyFavourite: boolean): void {
-    this.store.dispatch(onlyFavouriteMovies({isOnlyFavourite: onlyFavourite}));
+    this.uiFacade.selectFavoriteFilms(onlyFavourite);
   }
 
   sortByDate(sort: SORT): void {
-    this.store.dispatch(sortByDate({sort}));
+    this.movieFacade.sortByDates(sort);
   }
 
   pageHandler(page: PageEvent): void {

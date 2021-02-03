@@ -20,6 +20,8 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '@environments/environment';
 import {localStorageSync} from 'ngrx-store-localstorage';
 import {effects, reducers} from '../store';
+import {MovieFacade} from '../store/movie/movie-facade.service';
+import {UiFacade} from '../store/ui/ui-facade.service';
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({keys: ['data'], rehydrate: true})(reducer);
@@ -52,7 +54,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   ],
   providers: [
     ApiService,
-    MoviesService
+    MoviesService,
+    MovieFacade,
+    UiFacade
   ],
   bootstrap: [AppComponent]
 })

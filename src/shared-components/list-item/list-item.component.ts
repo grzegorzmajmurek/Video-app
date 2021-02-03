@@ -1,11 +1,9 @@
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
-import { Component, OnInit, Input } from '@angular/core';
-import { Movie, DISPLAY_TYPE } from '@model/movies.model';
-import { DialogComponent } from '@shared-components/dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import {Store} from '@ngrx/store';;
-import {addToFavourite, deleteFromFavourite, removeMovie} from '../../store/movie/movie.actions';
-import {AppState} from '../../store/app.selectors';
+import {BUTTON_TYPE} from '@shared-components/button/button.component';
+import {Component, OnInit, Input} from '@angular/core';
+import {Movie, DISPLAY_TYPE} from '@model/movies.model';
+import {DialogComponent} from '@shared-components/dialog/dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {MovieFacade} from '../../store/movie/movie-facade.service';
 
 @Component({
   selector: 'app-list-item',
@@ -17,24 +15,26 @@ export class ListItemComponent implements OnInit {
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
   BUTTON_TYPE = BUTTON_TYPE;
-  constructor(public dialog: MatDialog, private readonly store: Store<AppState>) { }
+
+  constructor(public dialog: MatDialog, public appFacade: MovieFacade) {
+  }
 
   ngOnInit(): void {
- }
+  }
 
   deleteMovie(id: string): void {
-    this.store.dispatch(removeMovie({id}));
+    this.appFacade.deleteFilm(id);
   }
 
   setFavourite(id: string): void {
-    this.store.dispatch(addToFavourite({id}));
+    this.appFacade.setFavouriteFilm(id);
   }
 
   openDialog(url: string): void {
-    this.dialog.open(DialogComponent, { data: { url } });
+    this.dialog.open(DialogComponent, {data: {url}});
   }
 
   deleteFavorite(id: string): void {
-    this.store.dispatch(deleteFromFavourite({id}));
+    this.appFacade.deleteFavoriteFilm(id);
   }
 }
