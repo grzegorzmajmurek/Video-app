@@ -1,9 +1,12 @@
-import {BUTTON_TYPE} from '@shared-components/button/button.component';
-import {Component, OnInit, Input} from '@angular/core';
-import {Movie, DISPLAY_TYPE} from '@model/movies.model';
-import {DialogComponent} from '@shared-components/dialog/dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {MovieFacade} from '../../store/movie/movie-facade.service';
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
+import { DialogComponent } from '@shared-components/dialog/dialog.component';
+
+import { Component, OnInit, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Movie, DISPLAY_TYPE } from '@model/movies.model';
+
+import { MovieFacade } from '@store/movie/movie-facade.service';
 
 @Component({
   selector: 'app-list-item',
@@ -23,11 +26,11 @@ export class ListItemComponent implements OnInit {
   }
 
   deleteMovie(id: string): void {
-    this.appFacade.deleteFilm(id);
+    this.appFacade.deleteMovie(id);
   }
 
   setFavourite(id: string): void {
-    this.appFacade.setFavouriteFilm(id);
+    this.appFacade.setFavouriteMovie(id);
   }
 
   openDialog(url: string): void {
@@ -35,6 +38,6 @@ export class ListItemComponent implements OnInit {
   }
 
   deleteFavorite(id: string): void {
-    this.appFacade.deleteFavoriteFilm(id);
+    this.appFacade.deleteFavoriteMovie(id);
   }
 }

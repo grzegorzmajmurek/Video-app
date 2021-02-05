@@ -12,16 +12,16 @@
         <div>
           <span>Przełącz</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_agenda" label="Lista"
-            (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
+                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.LIST)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="view_module" label="Kafelki"
-            (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
+                      (buttonClick)="changeDisplayType(DISPLAY_TYPE.CARD)"></app-button>
         </div>
         <div>
           <span>Sortuj</span>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_top" label="Ostatnio dodane"
-            (buttonClick)="sortByDate(SORT.ASC)"></app-button>
+                      (buttonClick)="sortByDate(SORT.ASC)"></app-button>
           <app-button [type]="BUTTON_TYPE.MINI_FAB" icon="vertical_align_bottom" label="Najstarsze"
-            (buttonClick)="sortByDate(SORT.DSC)"></app-button>
+                      (buttonClick)="sortByDate(SORT.DSC)"></app-button>
         </div>
       </mat-toolbar>
 
@@ -31,8 +31,8 @@
         </div>
       </div>
       <div class="mb-70">
-        <app-paginator [length]="allMovies?.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
-          (page)="pageHandler($event)">
+        <app-paginator [length]="(allMovies|async)?.length" [pageSize]="page.pageSize" [pageIndex]="page.pageIndex"
+                       (page)="pageHandler($event)">
         </app-paginator>
       </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="w-20 flex column">
       <mat-toolbar><span>Ulubione:</span></mat-toolbar>
       <div class="mb-70">
-        <div *ngFor="let movie of allMovies">
+        <div *ngFor="let movie of allMovies | async">
           <div *ngIf="movie.favorite">
             <app-list-item [type]="DISPLAY_TYPE.LIST_FAVORITE" [movie]="movie" class="w-100"></app-list-item>
           </div>

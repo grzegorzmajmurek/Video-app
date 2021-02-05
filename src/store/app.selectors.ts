@@ -1,7 +1,7 @@
-import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {MovieState} from './movie/movie.state';
-import {UiState} from './ui/ui.state';
-import {Movie} from '@model/movies.model';
+import { createSelector } from '@ngrx/store';
+import { MovieState } from './movie/movie.state';
+import { UiState } from './ui/ui.state';
+import { Movie } from '@model/movies.model';
 
 export interface AppState {
   data: MovieState;

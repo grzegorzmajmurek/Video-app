@@ -1,13 +1,21 @@
-import {Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from '@model/movies.model';
-import {Component, OnInit} from '@angular/core';
-import {DISPLAY_TYPE, VIDEO_WEBSITE, SORT} from '@model/movies.model';
-import {extractIdAndWebsiteType} from '@utile/utile';
-import {PageEvent} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BUTTON_TYPE} from '@shared-components/button/button.component';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {MovieFacade} from '../store/movie/movie-facade.service';
-import {UiFacade} from '../store/ui/ui-facade.service';
+import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
+import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
+
+import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
+
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { extractIdAndWebsiteType } from '@utile/utile';
+
+import { MovieFacade } from '@store/movie/movie-facade.service';
+import { UiFacade } from '@store/ui/ui-facade.service';
+
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -22,11 +30,11 @@ export class ContentComponent implements OnInit {
   BUTTON_TYPE = BUTTON_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavoriteMovie = false;
-  allMovies: Movie[] = [];
+  allMovies: Observable<Movie[]> = new Observable();
   page: PageEvent = {
     pageIndex: DEFAULT_PAGE_INDEX,
     pageSize: DEFAULT_PAGE_SIZE,
-    length: this.allMovies.length,
+    length: DEFAULT_PAGE_SIZE,
   };
   managedMovies: Movie[] = [];
 
@@ -36,17 +44,17 @@ export class ContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.movieFacade.allMovies$
+    this.allMovies = this.movieFacade.allMovies$;
+    combineLatest(this.movieFacade.managedMovies$)
       .pipe(untilDestroyed(this))
-      .subscribe(allMovies => this.allMovies = allMovies);
-    this.movieFacade.managedMovies$
-      .pipe(untilDestroyed(this))
-      .subscribe(movies => this.managedMovies = movies);
+      .subscribe(([movies]) => {
+        this.managedMovies = movies;
+      });
   }
 
   get sortedMoviesList(): Movie[] {
     let sliceMovies = this.slicePage(this.managedMovies, this.page);
-    if (sliceMovies.length === 0) {
+    if ( sliceMovies.length === 0 ) {
       const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
       this.page = {...this.page, ...{pageIndex: newPageIndex}};
       sliceMovies = this.slicePage(this.managedMovies, this.page);
@@ -59,10 +67,10 @@ export class ContentComponent implements OnInit {
   }
 
   handleApiResponse(type: VIDEO_WEBSITE, id: string): void {
-    if (type === VIDEO_WEBSITE.VIMEO) {
+    if ( type === VIDEO_WEBSITE.VIMEO ) {
       this.movieFacade.loadMovieFromVimeo(id);
     }
-    if (type === VIDEO_WEBSITE.YOUTUBE) {
+    if ( type === VIDEO_WEBSITE.YOUTUBE ) {
       this.movieFacade.loadMovieFromYoutube(id);
     }
   }
@@ -70,16 +78,23 @@ export class ContentComponent implements OnInit {
   handleValue(valueFromInput: any): void {
     this.value = valueFromInput;
     const {idVideo, videoWebsite} = extractIdAndWebsiteType(valueFromInput);
-    const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);
-    if (movieExist) {
-      this.openSnackBar('Ten film już istnieje');
-      return;
-    }
-    this.handleApiResponse(videoWebsite, idVideo);
+    const subAllMovies = this.allMovies
+      .pipe(
+        map(movies => movies.find(movie => movie.movieId === idVideo)),
+        untilDestroyed(this)
+      )
+      .subscribe(movieExist => {
+        if ( movieExist ) {
+          this.openSnackBar('Ten film już istnieje');
+        } else {
+          this.handleApiResponse(videoWebsite, idVideo);
+        }
+      });
+    subAllMovies.unsubscribe();
   }
 
   deleteAllMovies(): void {
-    this.movieFacade.deleteAllFilms();
+    this.movieFacade.deleteAllMovies();
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {

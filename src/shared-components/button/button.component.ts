@@ -19,7 +19,9 @@ export class ButtonComponent implements OnInit {
   @Input() type: BUTTON_TYPE = BUTTON_TYPE.BASIC;
   @Output() buttonClick = new EventEmitter<void>();
   BUTTON_TYPE = BUTTON_TYPE;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

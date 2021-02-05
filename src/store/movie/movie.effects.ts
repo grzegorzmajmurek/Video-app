@@ -1,16 +1,22 @@
-import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {map, mergeMap} from 'rxjs/operators';
-import {ApiService} from '@services/api.service';
+import { Injectable } from '@angular/core';
+
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+
+import { ApiService } from '@services/api.service';
 import {
   fetchMovieFromVimeo,
   fetchMovieFromYoutube,
   vimeoMovieLoadedSuccess,
   youtubeMovieLoadedSuccess
 } from './movie.actions';
-import {addAlert} from '../ui/ui.actions';
-import {VimeoApiResponse, YoutubeApiResponse} from '@model/api-response.model';
-import {Movie} from '@model/movies.model';
+
+import { movieLoadedError } from '../ui/ui.actions';
+
+import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
+import { Movie } from '@model/movies.model';
+
+import { map, mergeMap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class MovieEffects {
@@ -22,7 +28,7 @@ export class MovieEffects {
   }
 
   mapYoutubeResponse(res: YoutubeApiResponse): Movie {
-    const {id, snippet, statistics} = res.items[0];
+    const {id, snippet, statistics} = res.items[ 0 ];
     return {
       movieId: id,
       imageUrl: snippet.thumbnails.default.url,
@@ -36,25 +42,25 @@ export class MovieEffects {
 
   mapVimeoResponse(res: VimeoApiResponse, id: string): Movie {
     return {
-        movieId: id,
-        imageUrl: res.pictures.sizes[0].link,
-        title: res.name,
-        viewCount: '',
-        publishedAt: res.created_time,
-        url: `https://player.vimeo.com/video/${id}`,
-        favorite: false
-      };
-    }
+      movieId: id,
+      imageUrl: res.pictures.sizes[ 0 ].link,
+      title: res.name,
+      viewCount: '',
+      publishedAt: res.created_time,
+      url: `https://player.vimeo.com/video/${id}`,
+      favorite: false
+    };
+  }
 
   loadYoutubeMovie$ = createEffect(() => this.actions$.pipe(
     ofType(fetchMovieFromYoutube),
     mergeMap(({id}) => this.apiService.fetchYoutubeApi(id)
       .pipe(
         map(res => {
-          if (!id || res.items.length === 0) {
-            return addAlert({text: 'Podałeś niepoprawny link do YouTube'});
-          }
           return youtubeMovieLoadedSuccess({movie: this.mapYoutubeResponse(res)});
+        }),
+        catchError((err: any) => {
+          return of(movieLoadedError({error: `message: ${err}`}));
         })
       ))
   ));
@@ -64,11 +70,12 @@ export class MovieEffects {
     mergeMap(({id}) => this.apiService.fetchVimeoApi(id)
       .pipe(
         map(res => {
-          if (id) {
+          if ( id ) {
             return vimeoMovieLoadedSuccess({movie: this.mapVimeoResponse(res, id)});
-          } else {
-            return addAlert({text: 'Podałeś niepoprawny link do Vimeo'});
           }
+        }),
+        catchError((err: any) => {
+          return of(movieLoadedError({error: err}));
         })
       ))
   ));

@@ -8,7 +8,9 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 export class SearchInputComponent implements OnInit {
   @Input() value = '';
   @Output() valueChanged = new EventEmitter<string>();
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

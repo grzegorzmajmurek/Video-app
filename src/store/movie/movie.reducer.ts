@@ -1,8 +1,9 @@
 import * as MovieActions from './movie.actions';
-import {compare} from '@utile/utile';
-import {Action, createReducer, on} from '@ngrx/store';
-import {MovieState} from './movie.state';
-import {VimeoApiResponse} from '@model/api-response.model';
+import { MovieState } from './movie.state';
+
+import { compare } from '@utile/utile';
+
+import { Action, createReducer, on } from '@ngrx/store';
 
 
 const initialState: MovieState = {
@@ -10,18 +11,14 @@ const initialState: MovieState = {
 };
 const movieReducer = createReducer(
   initialState,
-  on(MovieActions.youtubeMovieLoadedSuccess, (state, {movie}) => {
-    return {
-      ...state,
-      movies: [movie, ...state.movies]
-    };
-  }),
-  on(MovieActions.vimeoMovieLoadedSuccess, (state, {movie}) => {
-    return {
-      ...state,
-      movies: [movie, ...state.movies]
-    };
-  }),
+  on(MovieActions.youtubeMovieLoadedSuccess, (state, {movie}) => ({
+    ...state,
+    movies: [movie, ...state.movies]
+  })),
+  on(MovieActions.vimeoMovieLoadedSuccess, (state, {movie}) => ({
+    ...state,
+    movies: [movie, ...state.movies]
+  })),
 
   on(MovieActions.removeMovie, (state, {id}) => ({
     ...state,
@@ -50,4 +47,3 @@ const movieReducer = createReducer(
 export function reducer(state: MovieState | undefined, action: Action) {
   return movieReducer(state, action);
 }
-

@@ -1,4 +1,4 @@
 export interface UiState {
-  alert: string;
+  error: any;
   onlyFavourite: boolean;
 }

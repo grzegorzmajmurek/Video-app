@@ -13,10 +13,12 @@ export class PaginatorComponent implements OnInit {
   @Input() pageIndex: number;
   @Output() page = new EventEmitter<PageEvent>();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
+
   pageEvent(pageEvent: PageEvent): void {
     this.page.emit(pageEvent);
   }

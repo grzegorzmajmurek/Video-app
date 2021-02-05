@@ -1,6 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {appQuery} from '../app.selectors';
+import { Injectable } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+
+import { appQuery } from '../app.selectors';
+
 import {
   addToFavourite,
   deleteAllMovies,
@@ -10,7 +13,8 @@ import {
   removeMovie,
   sortByDate
 } from './movie.actions';
-import {SORT} from '@model/movies.model';
+
+import { SORT } from '@model/movies.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +34,7 @@ export class MovieFacade {
     this.store.dispatch(fetchMovieFromVimeo({id}));
   }
 
-  deleteAllFilms(): void {
+  deleteAllMovies(): void {
     this.store.dispatch(deleteAllMovies());
   }
 
@@ -38,15 +42,15 @@ export class MovieFacade {
     this.store.dispatch(sortByDate({sort}));
   }
 
-  deleteFilm(id: string): void {
+  deleteMovie(id: string): void {
     this.store.dispatch(removeMovie({id}));
   }
 
-  setFavouriteFilm(id: string): void {
+  setFavouriteMovie(id: string): void {
     this.store.dispatch(addToFavourite({id}));
   }
 
-  deleteFavoriteFilm(id: string): void {
+  deleteFavoriteMovie(id: string): void {
     this.store.dispatch(deleteFromFavourite({id}));
   }
 }

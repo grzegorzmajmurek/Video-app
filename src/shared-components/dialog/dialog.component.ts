@@ -9,7 +9,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class DialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dom: DomSanitizer) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dom: DomSanitizer) {
+  }
 
   ngOnInit(): void {
   }

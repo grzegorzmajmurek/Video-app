@@ -12,7 +12,8 @@ export class CheckBoxComponent implements OnInit {
   @Input() checked = false;
   @Output() isChecked = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

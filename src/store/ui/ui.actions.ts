@@ -1,11 +1,11 @@
-import {createAction, props} from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 export const onlyFavouriteMovies = createAction(
-  '[UI] ONLY FAVOURITE',
-  props<{ isOnlyFavourite: boolean }>()
+  'ONLY FAVOURITE',
+  props<{isOnlyFavourite: boolean}>()
 );
 
-export const addAlert = createAction(
-  '[UI] ADD_ALERT',
-  props<{ text: string }>()
+export const movieLoadedError = createAction(
+  'MOVIE ERROR',
+  props<{error: any}>()
 );

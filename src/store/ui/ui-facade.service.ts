@@ -1,6 +1,6 @@
-import {onlyFavouriteMovies} from './ui.actions';
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
+import { onlyFavouriteMovies } from './ui.actions';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
