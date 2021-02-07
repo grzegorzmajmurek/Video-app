@@ -12,26 +12,21 @@ const movieReducer = createReducer(
   initialState,
   on(MovieActions.youtubeMovieLoadedSuccess, (state, {movie}) => ({
     ...state,
-    movies: [movie, ...state.movies]
+    movies: [ movie, ...state.movies ]
   })),
   on(MovieActions.vimeoMovieLoadedSuccess, (state, {movie}) => ({
     ...state,
-    movies: [movie, ...state.movies]
+    movies: [ movie, ...state.movies ]
   })),
 
   on(MovieActions.removeMovie, (state, {id}) => ({
     ...state,
-    movies: [...state.movies].filter(movie => movie.movieId !== id)
+    movies: [ ...state.movies ].filter(movie => movie.movieId !== id)
   })),
-  on(MovieActions.addToFavourite, (state, {id}) => ({
+  on(MovieActions.toggleFavourite, (state, {id, isFavourite}) => ({
     ...state,
-    movies: [...state.movies].map(movie => movie.movieId === id ? {...movie, favorite: true} : movie)
+    movies: [ ...state.movies ].map(movie => movie.movieId === id ? {...movie, favorite: isFavourite} : movie)
   })),
-  on(MovieActions.deleteFromFavourite, (state, {id}) => ({
-    ...state,
-    movies: [...state.movies].map(movie => movie.movieId === id ? {...movie, favorite: false} : movie)
-  })),
-
   on(MovieActions.deleteAllMovies, (state) => ({
     ...state,
     movies: []
@@ -39,7 +34,7 @@ const movieReducer = createReducer(
 
   on(MovieActions.sortByDate, (state, {sort}) => ({
     ...state,
-    movies: [...state.movies].sort((a, b) => compare(a, b, sort))
+    movies: [ ...state.movies ].sort((a, b) => compare(a, b, sort))
   }))
 );
 

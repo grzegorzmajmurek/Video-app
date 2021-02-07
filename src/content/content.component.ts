@@ -102,7 +102,7 @@ export class ContentComponent implements OnInit {
   }
 
   selectFavoriteMovies(onlyFavourite: boolean): void {
-    this.uiFacade.selectFavoriteFilms(onlyFavourite);
+    this.uiFacade.selectFavoriteMovies(onlyFavourite);
   }
 
   sortByDate(sort: SORT): void {

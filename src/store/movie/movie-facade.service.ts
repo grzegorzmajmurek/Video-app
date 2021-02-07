@@ -5,9 +5,8 @@ import { Store } from '@ngrx/store';
 import { appQuery } from '../app.selectors';
 
 import {
-  addToFavourite,
+  toggleFavourite,
   deleteAllMovies,
-  deleteFromFavourite,
   fetchMovieFromVimeo,
   fetchMovieFromYoutube,
   removeMovie,
@@ -46,11 +45,8 @@ export class MovieFacade {
     this.store.dispatch(removeMovie({id}));
   }
 
-  setFavouriteMovie(id: Movie['id']): void {
-    this.store.dispatch(addToFavourite({id}));
+  toggleFavouriteMovie(id: Movie['id'], isFavourite: boolean): void {
+    this.store.dispatch(toggleFavourite({id, isFavourite}));
   }
 
-  deleteFavoriteMovie(id: Movie['id']): void {
-    this.store.dispatch(deleteFromFavourite({id}));
-  }
 }

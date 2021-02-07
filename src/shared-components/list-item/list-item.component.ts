@@ -11,7 +11,7 @@ import { MovieFacade } from '@store/movie/movie-facade.service';
 @Component({
   selector: 'app-list-item',
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.css']
+  styleUrls: [ './list-item.component.css' ]
 })
 export class ListItemComponent {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
@@ -27,7 +27,7 @@ export class ListItemComponent {
   }
 
   setFavourite(id: Movie['id']): void {
-    this.appFacade.setFavouriteMovie(id);
+    this.appFacade.toggleFavouriteMovie(id, true);
   }
 
   openDialog(url: Movie['url']): void {
@@ -35,6 +35,6 @@ export class ListItemComponent {
   }
 
   deleteFavorite(id: Movie['id']): void {
-    this.appFacade.deleteFavoriteMovie(id);
+    this.appFacade.toggleFavouriteMovie(id, false);
   }
 }

@@ -5,14 +5,9 @@ export const deleteAllMovies = createAction(
   'DELETE_ALL_MOVIES'
 );
 
-export const addToFavourite = createAction(
-  'ADD_TO_FAVOURITE',
-  props<{id: Movie['id']}>()
-);
-
-export const deleteFromFavourite = createAction(
-  'DELETE_FROM_FAVOURITE',
-  props<{id: Movie['id']}>()
+export const toggleFavourite = createAction(
+  'TOGGLE_FAVOURITE',
+  props<{id: Movie['id'], isFavourite: boolean}>()
 );
 
 export const removeMovie = createAction(

@@ -16,7 +16,6 @@ import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model'
 import { Movie } from '@model/movies.model';
 
 import { map, mergeMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Injectable()
 export class MovieEffects {
@@ -59,9 +58,7 @@ export class MovieEffects {
         map(res => {
           return youtubeMovieLoadedSuccess({movie: this.mapYoutubeResponse(res)});
         }),
-        catchError((err: any) => {
-          return of(movieLoadedError({error: `message: ${err}`}));
-        })
+        catchError((err: any) => [movieLoadedError({error: `message: ${err}`})])
       ))
   ));
 
@@ -74,9 +71,7 @@ export class MovieEffects {
             return vimeoMovieLoadedSuccess({movie: this.mapVimeoResponse(res, id)});
           }
         }),
-        catchError((err: any) => {
-          return of(movieLoadedError({error: err}));
-        })
+        catchError((err: any) => [movieLoadedError({error: `message: ${err}`})])
       ))
   ));
 }

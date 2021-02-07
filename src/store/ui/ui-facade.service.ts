@@ -11,7 +11,7 @@ export class UiFacade {
   constructor(private store: Store) {
   }
 
-  selectFavoriteFilms(onlyFavourite: boolean): void {
+  selectFavoriteMovies(onlyFavourite: boolean): void {
     this.store.dispatch(onlyFavouriteMovies({isOnlyFavourite: onlyFavourite}));
   }
 }
