@@ -1,7 +1,7 @@
 import { BUTTON_TYPE } from '@shared-components/button/button.component';
 import { DialogComponent } from '@shared-components/dialog/dialog.component';
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Movie, DISPLAY_TYPE } from '@model/movies.model';
@@ -13,7 +13,7 @@ import { MovieFacade } from '@store/movie/movie-facade.service';
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.css']
 })
-export class ListItemComponent implements OnInit {
+export class ListItemComponent {
   @Input() type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   @Input() movie: Movie;
   DISPLAY_TYPE = DISPLAY_TYPE;
@@ -22,22 +22,19 @@ export class ListItemComponent implements OnInit {
   constructor(public dialog: MatDialog, public appFacade: MovieFacade) {
   }
 
-  ngOnInit(): void {
-  }
-
-  deleteMovie(id: string): void {
+  deleteMovie(id: Movie['id']): void {
     this.appFacade.deleteMovie(id);
   }
 
-  setFavourite(id: string): void {
+  setFavourite(id: Movie['id']): void {
     this.appFacade.setFavouriteMovie(id);
   }
 
-  openDialog(url: string): void {
+  openDialog(url: Movie['url']): void {
     this.dialog.open(DialogComponent, {data: {url}});
   }
 
-  deleteFavorite(id: string): void {
+  deleteFavorite(id: Movie['id']): void {
     this.appFacade.deleteFavoriteMovie(id);
   }
 }

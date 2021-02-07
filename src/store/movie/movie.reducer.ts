@@ -5,7 +5,6 @@ import { compare } from '@utile/utile';
 
 import { Action, createReducer, on } from '@ngrx/store';
 
-
 const initialState: MovieState = {
   movies: []
 };

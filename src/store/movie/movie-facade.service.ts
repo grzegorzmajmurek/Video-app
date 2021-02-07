@@ -14,7 +14,7 @@ import {
   sortByDate
 } from './movie.actions';
 
-import { SORT } from '@model/movies.model';
+import { Movie, SORT } from '@model/movies.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +26,11 @@ export class MovieFacade {
   constructor(private store: Store) {
   }
 
-  loadMovieFromYoutube(id: string): void {
+  loadMovieFromYoutube(id: Movie['id']): void {
     this.store.dispatch(fetchMovieFromYoutube({id}));
   }
 
-  loadMovieFromVimeo(id: string): void {
+  loadMovieFromVimeo(id: Movie['id']): void {
     this.store.dispatch(fetchMovieFromVimeo({id}));
   }
 
@@ -42,15 +42,15 @@ export class MovieFacade {
     this.store.dispatch(sortByDate({sort}));
   }
 
-  deleteMovie(id: string): void {
+  deleteMovie(id: Movie['id']): void {
     this.store.dispatch(removeMovie({id}));
   }
 
-  setFavouriteMovie(id: string): void {
+  setFavouriteMovie(id: Movie['id']): void {
     this.store.dispatch(addToFavourite({id}));
   }
 
-  deleteFavoriteMovie(id: string): void {
+  deleteFavoriteMovie(id: Movie['id']): void {
     this.store.dispatch(deleteFromFavourite({id}));
   }
 }

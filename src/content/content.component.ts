@@ -75,7 +75,7 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  handleValue(valueFromInput: any): void {
+  handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
     const {idVideo, videoWebsite} = extractIdAndWebsiteType(valueFromInput);
     const subAllMovies = this.allMovies
