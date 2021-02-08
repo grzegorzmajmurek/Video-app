@@ -7,22 +7,22 @@ export const deleteAllMovies = createAction(
 
 export const toggleFavourite = createAction(
   'TOGGLE_FAVOURITE',
-  props<{id: Movie['id'], isFavourite: boolean}>()
+  props<{id: Movie['movieId'], isFavourite: boolean}>()
 );
 
 export const removeMovie = createAction(
   'REMOVE_MOVIE',
-  props<{id: Movie['id']}>()
+  props<{id: Movie['movieId']}>()
 );
 
 export const fetchMovieFromYoutube = createAction(
   'FETCH_MOVIE_FROM_YOUTUBE',
-  props<{id: Movie['id']}>()
+  props<{id: Movie['movieId']}>()
 );
 
 export const fetchMovieFromVimeo = createAction(
   'FETCH_MOVIE_FROM_VIMEO',
-  props<{id: Movie['id']}>()
+  props<{id: Movie['movieId']}>()
 );
 
 export const youtubeMovieLoadedSuccess = createAction(

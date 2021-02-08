@@ -10,12 +10,13 @@ import {
   youtubeMovieLoadedSuccess
 } from './movie.actions';
 
-import { movieLoadedError } from '../ui/ui.actions';
 
 import { VimeoApiResponse, YoutubeApiResponse } from '@model/api-response.model';
 import { Movie } from '@model/movies.model';
 
 import { map, mergeMap, catchError } from 'rxjs/operators';
+
+import { movieLoadedError } from '../ui/ui.actions';
 
 @Injectable()
 export class MovieEffects {
