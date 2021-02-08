@@ -1,23 +1,11 @@
-import {Action} from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-export const ADD_ALERT = '[UI] ADD_ALERT';
-export const ONLY_FAVOURITE = '[UI] ONLY FAVOURITE';
+export const onlyFavouriteMovies = createAction(
+  'ONLY FAVOURITE',
+  props<{isOnlyFavourite: boolean}>()
+);
 
-export class OnlyFavourite implements Action {
-  readonly type = ONLY_FAVOURITE;
-
-  constructor(public onlyFavourite: boolean) {
-  }
-}
-
-export class AddAlert implements Action {
-  readonly type = ADD_ALERT;
-
-  constructor(public text: string) {
-  }
-}
-
-export type All = AddAlert |
-  OnlyFavourite;
-
-
+export const movieLoadedError = createAction(
+  'MOVIE ERROR',
+  props<{error: any}>()
+);

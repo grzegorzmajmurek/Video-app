@@ -18,6 +18,9 @@
       "@utile/*":[
         "./utile/*"
       ],
+      "@store/*":[
+        "./store/*"
+      ],
       "@environments/*":[
         "./environments/*"
       ]

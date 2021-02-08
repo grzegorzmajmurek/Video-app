@@ -1,7 +1,8 @@
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <mat-label>Podaj link do Youtube lub Vimeo</mat-label>
-    <input matInput placeholder="Np. https://www.youtube.com/watch?v=BCy3Y_pE-l0&feature=emb_title" [value]="value" (change)="onChangeValue($event)">
+    <input matInput placeholder="Np. https://www.youtube.com/watch?v=BCy3Y_pE-l0&feature=emb_title" [value]="value"
+           (change)="onChangeValue($event)">
     <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
       <mat-icon>close</mat-icon>
     </button>

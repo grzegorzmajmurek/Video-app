@@ -1,22 +1,23 @@
 import { Movie, DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@model/movies.model';
-import { Component, OnInit } from '@angular/core';
 import { DISPLAY_TYPE, VIDEO_WEBSITE, SORT } from '@model/movies.model';
-import { extractIdAndWebsiteType } from '@utile/utile';
+
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BUTTON_TYPE } from '@shared-components/button/button.component';
-import { Store } from '@ngrx/store';
-import {
-  DeleteAllMovies,
-  DownloadDataFromLocalStorage,
-  FetchMovieFromVimeo,
-  FetchMovieFromYoutube, SortByDate,
-  UpdateDataInLocalStorage,
-} from '../store/movie/movie.actions';
-import { AppState } from '../store/store.state';
-import { getManagedMovie, getAllMovies } from '../store/app.selectors';
-import { OnlyFavourite } from '../store/ui/ui.actions';
 
+import { BUTTON_TYPE } from '@shared-components/button/button.component';
+
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { extractIdAndWebsiteType } from '@utile/utile';
+
+import { MovieFacade } from '@store/movie/movie-facade.service';
+import { UiFacade } from '@store/ui/ui-facade.service';
+
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@UntilDestroy()
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
@@ -29,30 +30,31 @@ export class ContentComponent implements OnInit {
   BUTTON_TYPE = BUTTON_TYPE;
   type: DISPLAY_TYPE = DISPLAY_TYPE.LIST;
   onlyFavoriteMovie = false;
-  allMovies: Movie[] = [];
+  allMovies: Observable<Movie[]> = new Observable();
   page: PageEvent = {
     pageIndex: DEFAULT_PAGE_INDEX,
     pageSize: DEFAULT_PAGE_SIZE,
-    length: this.allMovies.length,
+    length: DEFAULT_PAGE_SIZE,
   };
   managedMovies: Movie[] = [];
 
   constructor(public snackBar: MatSnackBar,
-              private readonly store: Store<AppState>) {
+              public movieFacade: MovieFacade,
+              public uiFacade: UiFacade) {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new DownloadDataFromLocalStorage());
-    this.store.select(getAllMovies).subscribe(allMovies => {
-      console.log(allMovies);
-      return this.allMovies = allMovies;
-    });
-    this.store.select(getManagedMovie).subscribe(movies => this.managedMovies = movies);
+    this.allMovies = this.movieFacade.allMovies$;
+    combineLatest(this.movieFacade.managedMovies$)
+      .pipe(untilDestroyed(this))
+      .subscribe(([movies]) => {
+        this.managedMovies = movies;
+      });
   }
 
   get sortedMoviesList(): Movie[] {
     let sliceMovies = this.slicePage(this.managedMovies, this.page);
-    if (sliceMovies.length === 0) {
+    if ( sliceMovies.length === 0 ) {
       const newPageIndex = this.page.pageIndex !== 0 ? this.page.pageIndex - 1 : 0;
       this.page = {...this.page, ...{pageIndex: newPageIndex}};
       sliceMovies = this.slicePage(this.managedMovies, this.page);
@@ -64,41 +66,47 @@ export class ContentComponent implements OnInit {
     return this.type === DISPLAY_TYPE.LIST ? 'column' : 'wrap';
   }
 
-  handleApiResponse(type: VIDEO_WEBSITE, idVideo: string): void {
-    if (type === VIDEO_WEBSITE.VIMEO) {
-      this.store.dispatch(new FetchMovieFromVimeo(idVideo));
+  handleApiResponse(type: VIDEO_WEBSITE, id: string): void {
+    if ( type === VIDEO_WEBSITE.VIMEO ) {
+      this.movieFacade.loadMovieFromVimeo(id);
     }
-    if (type === VIDEO_WEBSITE.YOUTUBE) {
-      this.store.dispatch(new FetchMovieFromYoutube(idVideo));
+    if ( type === VIDEO_WEBSITE.YOUTUBE ) {
+      this.movieFacade.loadMovieFromYoutube(id);
     }
   }
 
-  handleValue(valueFromInput: any): void {
+  handleValue(valueFromInput: string): void {
     this.value = valueFromInput;
     const {idVideo, videoWebsite} = extractIdAndWebsiteType(valueFromInput);
-    const movieExist = this.allMovies.find(movie => movie.movieId === idVideo);
-    if (movieExist) {
-      this.openSnackBar('Ten film już istnieje');
-      return;
-    }
-    this.handleApiResponse(videoWebsite, idVideo);
+    const subAllMovies = this.allMovies
+      .pipe(
+        map(movies => movies.find(movie => movie.movieId === idVideo)),
+        untilDestroyed(this)
+      )
+      .subscribe(movieExist => {
+        if ( movieExist ) {
+          this.openSnackBar('Ten film już istnieje');
+        } else {
+          this.handleApiResponse(videoWebsite, idVideo);
+        }
+      });
+    subAllMovies.unsubscribe();
   }
 
   deleteAllMovies(): void {
-    this.store.dispatch(new DeleteAllMovies());
-    this.store.dispatch(new UpdateDataInLocalStorage());
+    this.movieFacade.deleteAllMovies();
   }
 
   changeDisplayType(type: DISPLAY_TYPE): void {
     this.type = type;
   }
 
-  selectFavoriteMovies(onlyFavoriteMovie: boolean): void {
-    this.store.dispatch(new OnlyFavourite(onlyFavoriteMovie));
+  selectFavoriteMovies(onlyFavourite: boolean): void {
+    this.uiFacade.selectFavoriteMovies(onlyFavourite);
   }
 
-  sortByDate(type: SORT): void {
-    this.store.dispatch(new SortByDate(type));
+  sortByDate(sort: SORT): void {
+    this.movieFacade.sortByDates(sort);
   }
 
   pageHandler(page: PageEvent): void {
