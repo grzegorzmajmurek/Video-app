@@ -8,9 +8,9 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 export class CheckBoxComponent {
   @Input() label = '';
   @Input() checked = false;
-  @Output() isChecked = new EventEmitter<boolean>();
+  @Output() change = new EventEmitter<boolean>();
 
   onChecked(value: boolean): void {
-    this.isChecked.emit(value);
+    this.change.emit(value);
   }
 }

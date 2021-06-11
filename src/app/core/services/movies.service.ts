@@ -63,7 +63,7 @@ export class MoviesService {
   }
 
   updateMovies(): void {
-    this.movies$.next(this.localStorage.setMoviesFromLocalStorage());
+    this.movies$.next(this.localStorage.getDataFromLocalStorage());
   }
 
   movieExist(movie: Movie): boolean {
